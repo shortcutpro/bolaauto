@@ -24,7 +24,7 @@
 * { margin:0; padding:0; box-sizing:border-box; }
 body {
     font-family: 'Rajdhani', sans-serif;
-    background: #000000;
+    background: linear-gradient(135deg,rgba(4,28,61,0.55),rgba(7,42,85,0.62)),url("https://cdn.areabermain.club/assets/cdn/az8/2025/11/19/20251119/9e6dcba5f4e223f30432ee6f22abe6dd/new-background-ziatogel.jpg") no-repeat;
     background-size:cover; background-position:center; background-attachment:fixed;
     color:#ffffff; min-height:100vh; transition:background 0.6s ease;
 }
@@ -556,7 +556,7 @@ var SITES = {
         favicon:'https://ziatogel90.com/assets/img/auo/favicon.png',
         mbappeGif:'https://photoku.io/images/2026/05/31/giffmbappee-finall.gif',
         bg:'https://cdn.areabermain.club/assets/cdn/az8/2025/11/19/20251119/9e6dcba5f4e223f30432ee6f22abe6dd/new-background-ziatogel.jpg',
-        bgOverlay:'rgba(4,28,61,0.82), rgba(7,42,85,0.86)',
+        bgOverlay:'rgba(4,28,61,0.55), rgba(7,42,85,0.62)',
         previewHeaderBg:'linear-gradient(180deg,#0c3a70,#041c3d)',
         marquee:'\ud83d\udc51 PREDIKSI BOLA TERUPDATE ! Tunggu apa lagi? Daftar di ZIA TOGEL dan nikmati pengalaman taruhan terbaik dengan peluang besar! \ud83d\udc51',
         defaultColors:{bg:'#FFC800',txt:'#fff6d8',hd:'#072a55',mq:'#FFC800'},
@@ -1994,6 +1994,10 @@ function restoreSettings() {
     var cfg = SITES[targetSite];
     var root = document.documentElement;
     Object.keys(cfg.cssVars).forEach(function(k){ root.style.setProperty(k, cfg.cssVars[k]); });
+    document.body.style.background = 'linear-gradient(135deg,' + cfg.bgOverlay + '),url("' + cfg.bg + '")';
+    document.body.style.backgroundSize = 'cover';
+    document.body.style.backgroundPosition = 'center';
+    document.body.style.backgroundAttachment = 'fixed';
     if (targetSite !== currentSite) {
         currentSite = targetSite;
         // Update UI badge + header tanpa trigger full switchSite

@@ -23,6 +23,17 @@ repo/
 ├── indratogel.html     ← Generator INDRA TOGEL  (Violet)
 ├── yowestogel.html     ← Generator YOWES TOGEL  (Red & Gold)
 ├── mancingduit.html    ← Generator MANCINGDUIT  (Ocean Blue)
+│
+├── hokbentoto-auto.html   ← Auto Embed HOKBENTOTO (standalone, LOGO_DB inline)
+├── bandar80-auto.html     ← Auto Embed BANDAR80
+├── tvtoto-auto.html       ← Auto Embed TVTOTO
+├── watitoto-auto.html     ← Auto Embed WATITOTO
+├── markaswd-auto.html     ← Auto Embed MARKASWD
+├── linetogel-auto.html    ← Auto Embed LINE TOGEL
+├── ziatogel-auto.html     ← Auto Embed ZIA TOGEL
+├── indratogel-auto.html   ← Auto Embed INDRA TOGEL
+├── yowestogel-auto.html   ← Auto Embed YOWES TOGEL
+├── mancingduit-auto.html  ← Auto Embed MANCINGDUIT
 ├── logo-db-0.js … logo-db-9.js  ← Database logo tim (30.000+ entries)
 ├── logo-db.js          ← ★ INPUT LOGO MANUAL (override, di-load terakhir)
 └── README.md
@@ -59,6 +70,15 @@ NORWAY ELITESERIEN
 - `[6]`, `[1]` dsb (angka klasemen) otomatis **di-strip** — tidak ikut tampil
 - Skor bisa pakai `:` atau `-`
 - Suffix `[W]`, `U19`, `U21` dsb otomatis dibersihkan saat lookup logo
+
+## ⚡ Auto Embed (`*-auto.html`)
+
+Versi standalone mengikuti `hkb77-auto-embed.html` dari repo leo08:
+
+- **Auto fetch** prediksi dari `https://shortq.xyz/prediksibola` (multi-proxy fallback) + auto refresh 5 menit
+- LOGO_DB **sudah tertanam di dalam file** (tidak butuh logo-db-*.js eksternal)
+- Background, logo, favicon, dan warna sesuai brand masing-masing
+- Cara pakai: buka langsung, atau paste seluruh isi file ke halaman/blog
 
 ## 🔧 Tambah Logo Manual
 

@@ -24,7 +24,7 @@
 * { margin:0; padding:0; box-sizing:border-box; }
 body {
     font-family: 'Rajdhani', sans-serif;
-    background: #000000;
+    background: linear-gradient(135deg,rgba(12,10,4,0.55),rgba(20,17,10,0.62)),url("https://cdn.areabermain.club/assets/cdn/az6/2026/02/06/20260206/89d78f13c77c4e01fd4c07b0e9f8a498/background-web-markaswd.jpg") no-repeat;
     background-size:cover; background-position:center; background-attachment:fixed;
     color:#ffffff; min-height:100vh; transition:background 0.6s ease;
 }
@@ -556,7 +556,7 @@ var SITES = {
         favicon:'https://markaswd38422.com/favicon.ico',
         mbappeGif:'https://photoku.io/images/2026/05/31/giffmbappee-finall.gif',
         bg:'https://cdn.areabermain.club/assets/cdn/az6/2026/02/06/20260206/89d78f13c77c4e01fd4c07b0e9f8a498/background-web-markaswd.jpg',
-        bgOverlay:'rgba(12,10,4,0.82), rgba(20,17,10,0.86)',
+        bgOverlay:'rgba(12,10,4,0.55), rgba(20,17,10,0.62)',
         previewHeaderBg:'linear-gradient(180deg,#1f1a10,#0c0a04)',
         marquee:'\ud83d\udc51 PREDIKSI BOLA TERUPDATE ! Tunggu apa lagi? Daftar di MARKASWD dan nikmati pengalaman taruhan terbaik dengan peluang besar! \ud83d\udc51',
         defaultColors:{bg:'#E8B93E',txt:'#fdf3d7',hd:'#14110a',mq:'#E8B93E'},
@@ -1994,6 +1994,10 @@ function restoreSettings() {
     var cfg = SITES[targetSite];
     var root = document.documentElement;
     Object.keys(cfg.cssVars).forEach(function(k){ root.style.setProperty(k, cfg.cssVars[k]); });
+    document.body.style.background = 'linear-gradient(135deg,' + cfg.bgOverlay + '),url("' + cfg.bg + '")';
+    document.body.style.backgroundSize = 'cover';
+    document.body.style.backgroundPosition = 'center';
+    document.body.style.backgroundAttachment = 'fixed';
     if (targetSite !== currentSite) {
         currentSite = targetSite;
         // Update UI badge + header tanpa trigger full switchSite

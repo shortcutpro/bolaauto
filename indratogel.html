@@ -24,7 +24,7 @@
 * { margin:0; padding:0; box-sizing:border-box; }
 body {
     font-family: 'Rajdhani', sans-serif;
-    background: #000000;
+    background: linear-gradient(135deg,rgba(18,0,36,0.55),rgba(26,3,51,0.62)),url("https://cdn.areabermain.club/assets/cdn/az3/2026/01/14/20260114/55bc758c10becd1d02514cf92628b661/background-new-indratogel.jpg") no-repeat;
     background-size:cover; background-position:center; background-attachment:fixed;
     color:#ffffff; min-height:100vh; transition:background 0.6s ease;
 }
@@ -556,7 +556,7 @@ var SITES = {
         favicon:'https://indratogel92.com/assets/img/aei/favicon.png',
         mbappeGif:'https://photoku.io/images/2026/05/31/giffmbappee-finall.gif',
         bg:'https://cdn.areabermain.club/assets/cdn/az3/2026/01/14/20260114/55bc758c10becd1d02514cf92628b661/background-new-indratogel.jpg',
-        bgOverlay:'rgba(18,0,36,0.82), rgba(26,3,51,0.86)',
+        bgOverlay:'rgba(18,0,36,0.55), rgba(26,3,51,0.62)',
         previewHeaderBg:'linear-gradient(180deg,#260a48,#120024)',
         marquee:'\ud83d\udc51 PREDIKSI BOLA TERUPDATE ! Tunggu apa lagi? Daftar di INDRA TOGEL dan nikmati pengalaman taruhan terbaik dengan peluang besar! \ud83d\udc51',
         defaultColors:{bg:'#A66BFF',txt:'#f0e6ff',hd:'#1a0333',mq:'#A66BFF'},
@@ -1994,6 +1994,10 @@ function restoreSettings() {
     var cfg = SITES[targetSite];
     var root = document.documentElement;
     Object.keys(cfg.cssVars).forEach(function(k){ root.style.setProperty(k, cfg.cssVars[k]); });
+    document.body.style.background = 'linear-gradient(135deg,' + cfg.bgOverlay + '),url("' + cfg.bg + '")';
+    document.body.style.backgroundSize = 'cover';
+    document.body.style.backgroundPosition = 'center';
+    document.body.style.backgroundAttachment = 'fixed';
     if (targetSite !== currentSite) {
         currentSite = targetSite;
         // Update UI badge + header tanpa trigger full switchSite

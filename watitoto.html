@@ -24,7 +24,7 @@
 * { margin:0; padding:0; box-sizing:border-box; }
 body {
     font-family: 'Rajdhani', sans-serif;
-    background: #000000;
+    background: linear-gradient(135deg,rgba(25,7,0,0.55),rgba(37,12,0,0.62)),url("https://cdn.areabermain.club/assets/cdn/az2/2026/07/08/20260708/434c53a4e73749ec892b8facbae0429f/watitoto-background.jpg") no-repeat;
     background-size:cover; background-position:center; background-attachment:fixed;
     color:#ffffff; min-height:100vh; transition:background 0.6s ease;
 }
@@ -556,7 +556,7 @@ var SITES = {
         favicon:'https://watitoto71.com/favicon.ico',
         mbappeGif:'https://photoku.io/images/2026/05/31/giffmbappee-finall.gif',
         bg:'https://cdn.areabermain.club/assets/cdn/az2/2026/07/08/20260708/434c53a4e73749ec892b8facbae0429f/watitoto-background.jpg',
-        bgOverlay:'rgba(25,7,0,0.82), rgba(37,12,0,0.86)',
+        bgOverlay:'rgba(25,7,0,0.55), rgba(37,12,0,0.62)',
         previewHeaderBg:'linear-gradient(180deg,#371300,#190700)',
         marquee:'\ud83d\udc51 PREDIKSI BOLA TERUPDATE ! Tunggu apa lagi? Daftar di WATITOTO dan nikmati pengalaman taruhan terbaik dengan peluang besar! \ud83d\udc51',
         defaultColors:{bg:'#FF7A00',txt:'#ffe9d2',hd:'#250c00',mq:'#FF7A00'},
@@ -1994,6 +1994,10 @@ function restoreSettings() {
     var cfg = SITES[targetSite];
     var root = document.documentElement;
     Object.keys(cfg.cssVars).forEach(function(k){ root.style.setProperty(k, cfg.cssVars[k]); });
+    document.body.style.background = 'linear-gradient(135deg,' + cfg.bgOverlay + '),url("' + cfg.bg + '")';
+    document.body.style.backgroundSize = 'cover';
+    document.body.style.backgroundPosition = 'center';
+    document.body.style.backgroundAttachment = 'fixed';
     if (targetSite !== currentSite) {
         currentSite = targetSite;
         // Update UI badge + header tanpa trigger full switchSite

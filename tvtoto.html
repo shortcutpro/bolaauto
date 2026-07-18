@@ -24,7 +24,7 @@
 * { margin:0; padding:0; box-sizing:border-box; }
 body {
     font-family: 'Rajdhani', sans-serif;
-    background: #000000;
+    background: linear-gradient(135deg,rgba(25,0,0,0.55),rgba(36,2,2,0.62)),url("https://cdn.areabermain.club/assets/cdn/az1/2026/04/03/20260403/a303c746fd0aa7ab97095a9bf285beae/background-web-tvtoto.jpg") no-repeat;
     background-size:cover; background-position:center; background-attachment:fixed;
     color:#ffffff; min-height:100vh; transition:background 0.6s ease;
 }
@@ -556,7 +556,7 @@ var SITES = {
         favicon:'https://tvtoto80546.com/favicon.ico',
         mbappeGif:'https://photoku.io/images/2026/05/31/giffmbappee-finall.gif',
         bg:'https://cdn.areabermain.club/assets/cdn/az1/2026/04/03/20260403/a303c746fd0aa7ab97095a9bf285beae/background-web-tvtoto.jpg',
-        bgOverlay:'rgba(25,0,0,0.82), rgba(36,2,2,0.86)',
+        bgOverlay:'rgba(25,0,0,0.55), rgba(36,2,2,0.62)',
         previewHeaderBg:'linear-gradient(180deg,#350505,#190000)',
         marquee:'\ud83d\udc51 PREDIKSI BOLA TERUPDATE ! Tunggu apa lagi? Daftar di TVTOTO dan nikmati pengalaman taruhan terbaik dengan peluang besar! \ud83d\udc51',
         defaultColors:{bg:'#FF2E2E',txt:'#ffe2e2',hd:'#240202',mq:'#FF2E2E'},
@@ -1994,6 +1994,10 @@ function restoreSettings() {
     var cfg = SITES[targetSite];
     var root = document.documentElement;
     Object.keys(cfg.cssVars).forEach(function(k){ root.style.setProperty(k, cfg.cssVars[k]); });
+    document.body.style.background = 'linear-gradient(135deg,' + cfg.bgOverlay + '),url("' + cfg.bg + '")';
+    document.body.style.backgroundSize = 'cover';
+    document.body.style.backgroundPosition = 'center';
+    document.body.style.backgroundAttachment = 'fixed';
     if (targetSite !== currentSite) {
         currentSite = targetSite;
         // Update UI badge + header tanpa trigger full switchSite
