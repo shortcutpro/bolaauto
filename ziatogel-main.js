@@ -27,14 +27,43 @@ var PROXIES = [
 ═══════════════════════════════════════════════ */
 var root = document.getElementById('ziatogel-root');
 
-function showLoading(msg, sub){
+function showLoading(msg, pct){
+  var pctVal = (typeof pct === 'number') ? pct : -1;
+  var hasBar = pctVal >= 0;
   root.innerHTML =
     '<div class="ibc-loading-wrap">'+
     '<img src="https://ziatogel90.com/assets/img/auo/logo.png" alt="ZIA TOGEL" style="width:110px;max-height:72px;object-fit:contain;filter:drop-shadow(0 0 16px #FFC800);margin-bottom:8px;"/>'+
     '<div class="ibc-spinner"></div>'+
     '<div class="ibc-loading-text">⚽ '+(msg||'Memuat Prediksi ZIA TOGEL…')+'</div>'+
-    (sub?'<div class="ibc-loading-sub">'+sub+'</div>':'')+
+    (hasBar?
+      '<div class="ibc-progress-wrap">'+
+        '<div class="ibc-progress-track"><div class="ibc-progress-fill" id="ibc-pbar" style="width:'+pctVal+'%"></div></div>'+
+        '<div class="ibc-progress-pct" id="ibc-ppct">'+Math.round(pctVal)+'%</div>'+
+      '</div>'
+    :'')+
     '</div>';
+}
+
+function updateProgress(pct){
+  var bar = document.getElementById('ibc-pbar');
+  var lbl = document.getElementById('ibc-ppct');
+  if(bar) bar.style.width = pct+'%';
+  if(lbl) lbl.textContent = Math.round(pct)+'%';
+}
+
+function animateProgress(from, to, duration){
+  return new Promise(function(resolve){
+    var start = performance.now();
+    function tick(now){
+      var elapsed = now - start;
+      var progress = Math.min(elapsed / duration, 1);
+      var current = from + (to - from) * progress;
+      updateProgress(current);
+      if(progress < 1) requestAnimationFrame(tick);
+      else resolve();
+    }
+    requestAnimationFrame(tick);
+  });
 }
 function showError(msg){
   root.innerHTML =
@@ -48,27 +77,51 @@ function showError(msg){
    FETCH dengan fallback multi-proxy
 ═══════════════════════════════════════════════ */
 async function fetchHTML(url){
-  for(var i=0;i<PROXIES.length;i++){
+  var totalProxies = PROXIES.length;
+  var perProxy = 60 / totalProxies;
+
+  for(var i=0;i<totalProxies;i++){
     var px=PROXIES[i];
+    var baseP = i * perProxy;
     try{
-      showLoading('Memuat Prediksi ZIA TOGEL…','['+( i+1)+'/'+PROXIES.length+'] Mencoba '+px.name+'…');
+      updateProgress(baseP);
+      console.log('[ZIA TOGEL] Mencoba '+px.name+'…');
       var ctrl=new AbortController();
       var tid=setTimeout(function(){ctrl.abort();},10000);
+
+      var fetchDone = false;
+      var animProm = (function(bp, pp){
+        return new Promise(function(res){
+          var s = performance.now();
+          function t(now){
+            if(fetchDone){ res(); return; }
+            var p = Math.min((now-s)/9000, 0.9);
+            updateProgress(bp + pp * p);
+            requestAnimationFrame(t);
+          }
+          requestAnimationFrame(t);
+        });
+      })(baseP, perProxy);
+
       var resp=await fetch(px.url(url),{signal:ctrl.signal,cache:'no-store'});
       clearTimeout(tid);
+      fetchDone = true;
       if(!resp.ok) throw new Error('HTTP '+resp.status);
       var html;
       if(px.json){ var j=await resp.json(); html=j.contents||''; }
       else { html=await resp.text(); }
       if(!html||html.length<200) throw new Error('Respons kosong');
       console.log('[ZIA TOGEL] OK via '+px.name);
+      updateProgress(60);
       return html;
     }catch(e){
+      fetchDone = true;
       console.warn('[ZIA TOGEL] '+px.name+' gagal:',e.message);
     }
   }
   throw new Error('Semua proxy gagal');
 }
+
 
 /* ═══════════════════════════════════════════════
    PARSER — adaptasi dari generator.html
@@ -656,16 +709,26 @@ function injectHTML(html){
 ═══════════════════════════════════════════════ */
 async function loadAndRender(){
   try {
-    showLoading('Memuat Prediksi ZIA TOGEL…','Mengambil data dari sumber…');
+    showLoading('Memuat Prediksi ZIA TOGEL…', 0);
+    await animateProgress(0, 5, 400);
+
     var html = await fetchHTML(SOURCE_URL);
-    showLoading('Memuat Prediksi ZIA TOGEL…','Memproses data prediksi…');
+
+    await animateProgress(60, 75, 300);
     var lines = parseRawHtml(html);
     if(!lines.length) throw new Error('Tidak ada data ditemukan');
     var input = lines.join('\n');
+
+    await animateProgress(75, 85, 200);
     var leagues = parseAll(input);
     if(!leagues.length) throw new Error('Data tidak dapat diparse');
-    showLoading('Memuat Prediksi ZIA TOGEL…','Membangun tampilan…');
+
+    await animateProgress(85, 95, 200);
     var output = buildOutputHTML(leagues);
+
+    await animateProgress(95, 100, 200);
+    await new Promise(function(r){ setTimeout(r, 150); });
+
     injectHTML(output);
   } catch(e) {
     console.error('[ZIA TOGEL Embed]',e);
