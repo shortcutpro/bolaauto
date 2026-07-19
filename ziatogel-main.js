@@ -11,8 +11,8 @@ var MBAPPE_GIF    = 'https://photoku.io/images/2026/05/31/giffmbappee-finall.gif
 var MARQUEE_TEXT  = '👑 PREDIKSI BOLA TERUPDATE ! Tunggu apa lagi? Daftar di ZIA TOGEL dan nikmati pengalaman taruhan terbaik! 👑';
 var COLOR_MAIN    = '#FFC800';
 var COLOR_TEXT    = '#fff6d8';
-var BG_IMAGE      = 'https://cdn.areabermain.club/assets/cdn/az8/2025/11/19/20251119/9e6dcba5f4e223f30432ee6f22abe6dd/new-background-ziatogel.jpg';
-var BG_OVERLAY    = 'rgba(0,0,0,0.0), rgba(0,0,0,0.0)';
+var BG_IMAGE      = '';
+var BG_OVERLAY    = '#000000';
 var AUTO_REFRESH  = 5 * 60 * 1000; // 5 menit
 
 var PROXIES = [
