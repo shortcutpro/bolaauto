@@ -27,6 +27,17 @@ var PROXIES = [
 ═══════════════════════════════════════════════ */
 var root = document.getElementById('ziatogel-root');
 
+// Inject progress bar CSS
+(function(){
+  var s=document.createElement('style');
+  s.textContent=
+    '#ziatogel-root .ibc-progress-wrap{width:80%;max-width:320px;margin-top:2px;}'
+    +'#ziatogel-root .ibc-progress-track{width:100%;height:10px;background:rgba(255,255,255,0.06);border-radius:8px;overflow:hidden;border:1px solid #FFC80026;position:relative;}'
+    +'#ziatogel-root .ibc-progress-fill{height:100%;width:0%;background:linear-gradient(90deg,#8c6e00,#FFC800,#ffd84c);border-radius:8px;transition:width .4s ease;box-shadow:0 0 12px #FFC80066,inset 0 1px 0 rgba(255,255,255,0.25);}'
+    +'#ziatogel-root .ibc-progress-pct{color:#FFC800;font-size:12px;font-weight:700;letter-spacing:1px;text-align:center;margin-top:6px;text-shadow:0 0 8px #FFC80060;}';
+  document.head.appendChild(s);
+})();
+
 function showLoading(msg, pct){
   var pctVal = (typeof pct === 'number') ? pct : -1;
   var hasBar = pctVal >= 0;
@@ -121,7 +132,6 @@ async function fetchHTML(url){
   }
   throw new Error('Semua proxy gagal');
 }
-
 
 /* ═══════════════════════════════════════════════
    PARSER — adaptasi dari generator.html
