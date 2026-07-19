@@ -12,7 +12,7 @@ var MARQUEE_TEXT  = '👑 PREDIKSI BOLA TERUPDATE ! Tunggu apa lagi? Daftar di Z
 var COLOR_MAIN    = '#FFC800';
 var COLOR_TEXT    = '#fff6d8';
 var BG_IMAGE      = 'https://cdn.areabermain.club/assets/cdn/az8/2025/11/19/20251119/9e6dcba5f4e223f30432ee6f22abe6dd/new-background-ziatogel.jpg';
-var BG_OVERLAY    = 'rgba(0,0,0,0.85), rgba(0,0,0,0.85)';
+var BG_OVERLAY    = 'rgba(0,0,0,0.0), rgba(0,0,0,0.0)';
 var AUTO_REFRESH  = 5 * 60 * 1000; // 5 menit
 
 var PROXIES = [
