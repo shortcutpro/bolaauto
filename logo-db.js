@@ -21,7 +21,6 @@ Object.assign(LOGO_DB, {
 
     // ── TAMBAHKAN LOGO MANUAL DI BAWAH SINI ──────────────────────
     // "nama tim lowercase": "https://url-logo.png",
-    "HJK Helsinki": "https://static.flashscore.com/res/image/data/xfM2XZfM-xO7wlFSD.png",
 
 
 
