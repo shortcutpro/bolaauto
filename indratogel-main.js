@@ -27,14 +27,54 @@ var PROXIES = [
 ═══════════════════════════════════════════════ */
 var root = document.getElementById('indratogel-root');
 
-function showLoading(msg, sub){
+// Inject progress bar CSS
+(function(){
+  var s=document.createElement('style');
+  s.textContent=
+    '#indratogel-root .ibc-progress-wrap{width:80%;max-width:320px;margin-top:2px;}'
+    +'#indratogel-root .ibc-progress-track{width:100%;height:10px;background:rgba(255,255,255,0.06);border-radius:8px;overflow:hidden;border:1px solid #A66BFF26;position:relative;}'
+    +'#indratogel-root .ibc-progress-fill{height:100%;width:0%;background:linear-gradient(90deg,#5b3a8c,#A66BFF,#c097ff);border-radius:8px;transition:width .4s ease;box-shadow:0 0 12px #A66BFF66,inset 0 1px 0 rgba(255,255,255,0.25);}'
+    +'#indratogel-root .ibc-progress-pct{color:#A66BFF;font-size:12px;font-weight:700;letter-spacing:1px;text-align:center;margin-top:6px;text-shadow:0 0 8px #A66BFF60;}';
+  document.head.appendChild(s);
+})();
+
+function showLoading(msg, pct){
+  var pctVal = (typeof pct === 'number') ? pct : -1;
+  var hasBar = pctVal >= 0;
   root.innerHTML =
     '<div class="ibc-loading-wrap">'+
     '<img src="https://indratogel92.com/assets/img/aei/logo.png?v=666" alt="INDRA TOGEL" style="width:110px;max-height:72px;object-fit:contain;filter:drop-shadow(0 0 16px #A66BFF);margin-bottom:8px;"/>'+
     '<div class="ibc-spinner"></div>'+
     '<div class="ibc-loading-text">⚽ '+(msg||'Memuat Prediksi INDRA TOGEL…')+'</div>'+
-    (sub?'<div class="ibc-loading-sub">'+sub+'</div>':'')+
+    (hasBar?
+      '<div class="ibc-progress-wrap">'+
+        '<div class="ibc-progress-track"><div class="ibc-progress-fill" id="ibc-pbar" style="width:'+pctVal+'%"></div></div>'+
+        '<div class="ibc-progress-pct" id="ibc-ppct">'+Math.round(pctVal)+'%</div>'+
+      '</div>'
+    :'')+
     '</div>';
+}
+
+function updateProgress(pct){
+  var bar = document.getElementById('ibc-pbar');
+  var lbl = document.getElementById('ibc-ppct');
+  if(bar) bar.style.width = pct+'%';
+  if(lbl) lbl.textContent = Math.round(pct)+'%';
+}
+
+function animateProgress(from, to, duration){
+  return new Promise(function(resolve){
+    var start = performance.now();
+    function tick(now){
+      var elapsed = now - start;
+      var progress = Math.min(elapsed / duration, 1);
+      var current = from + (to - from) * progress;
+      updateProgress(current);
+      if(progress < 1) requestAnimationFrame(tick);
+      else resolve();
+    }
+    requestAnimationFrame(tick);
+  });
 }
 function showError(msg){
   root.innerHTML =
@@ -48,22 +88,45 @@ function showError(msg){
    FETCH dengan fallback multi-proxy
 ═══════════════════════════════════════════════ */
 async function fetchHTML(url){
-  for(var i=0;i<PROXIES.length;i++){
+  var totalProxies = PROXIES.length;
+  var perProxy = 60 / totalProxies;
+
+  for(var i=0;i<totalProxies;i++){
     var px=PROXIES[i];
+    var baseP = i * perProxy;
     try{
-      showLoading('Memuat Prediksi INDRA TOGEL…','['+( i+1)+'/'+PROXIES.length+'] Mencoba '+px.name+'…');
+      updateProgress(baseP);
+      console.log('[INDRA TOGEL] Mencoba '+px.name+'…');
       var ctrl=new AbortController();
       var tid=setTimeout(function(){ctrl.abort();},10000);
+
+      var fetchDone = false;
+      var animProm = (function(bp, pp){
+        return new Promise(function(res){
+          var s = performance.now();
+          function t(now){
+            if(fetchDone){ res(); return; }
+            var p = Math.min((now-s)/9000, 0.9);
+            updateProgress(bp + pp * p);
+            requestAnimationFrame(t);
+          }
+          requestAnimationFrame(t);
+        });
+      })(baseP, perProxy);
+
       var resp=await fetch(px.url(url),{signal:ctrl.signal,cache:'no-store'});
       clearTimeout(tid);
+      fetchDone = true;
       if(!resp.ok) throw new Error('HTTP '+resp.status);
       var html;
       if(px.json){ var j=await resp.json(); html=j.contents||''; }
       else { html=await resp.text(); }
       if(!html||html.length<200) throw new Error('Respons kosong');
       console.log('[INDRA TOGEL] OK via '+px.name);
+      updateProgress(60);
       return html;
     }catch(e){
+      fetchDone = true;
       console.warn('[INDRA TOGEL] '+px.name+' gagal:',e.message);
     }
   }
@@ -655,16 +718,26 @@ function injectHTML(html){
 ═══════════════════════════════════════════════ */
 async function loadAndRender(){
   try {
-    showLoading('Memuat Prediksi INDRA TOGEL…','Mengambil data dari sumber…');
+    showLoading('Memuat Prediksi INDRA TOGEL…', 0);
+    await animateProgress(0, 5, 400);
+
     var html = await fetchHTML(SOURCE_URL);
-    showLoading('Memuat Prediksi INDRA TOGEL…','Memproses data prediksi…');
+
+    await animateProgress(60, 75, 300);
     var lines = parseRawHtml(html);
     if(!lines.length) throw new Error('Tidak ada data ditemukan');
     var input = lines.join('\n');
+
+    await animateProgress(75, 85, 200);
     var leagues = parseAll(input);
     if(!leagues.length) throw new Error('Data tidak dapat diparse');
-    showLoading('Memuat Prediksi INDRA TOGEL…','Membangun tampilan…');
+
+    await animateProgress(85, 95, 200);
     var output = buildOutputHTML(leagues);
+
+    await animateProgress(95, 100, 200);
+    await new Promise(function(r){ setTimeout(r, 150); });
+
     injectHTML(output);
   } catch(e) {
     console.error('[INDRA TOGEL Embed]',e);
