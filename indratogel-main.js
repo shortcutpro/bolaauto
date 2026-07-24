@@ -1,4 +1,4 @@
-﻿(function(){
+(function(){
 
 
 /* ═══════════════════════════════════════════════
@@ -11,8 +11,8 @@ var MBAPPE_GIF    = 'https://photoku.io/images/2026/05/31/giffmbappee-finall.gif
 var MARQUEE_TEXT  = '👑 PREDIKSI BOLA TERUPDATE ! Tunggu apa lagi? Daftar di INDRA TOGEL dan nikmati pengalaman taruhan terbaik! 👑';
 var COLOR_MAIN    = '#A66BFF';
 var COLOR_TEXT    = '#f0e6ff';
-var BG_IMAGE      = 'https://cdn.areabermain.club/assets/cdn/az3/2026/01/14/20260114/55bc758c10becd1d02514cf92628b661/background-new-indratogel.jpg';
-var BG_OVERLAY    = 'rgba(18,0,36,0.55), rgba(26,3,51,0.62)';
+var BG_IMAGE      = '';
+var BG_OVERLAY    = '#000000';
 var AUTO_REFRESH  = 5 * 60 * 1000; // 5 menit
 
 var PROXIES = [
@@ -563,13 +563,13 @@ function buildOutputHTML(leagues){
 +'.filter-label{font-size:10px;color:var(--g);opacity:.75;text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:6px;display:block;}\n'
 +'.select-box{position:relative;}\n'
 +'.select-box::after{content:"\\25BC";position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--g);font-size:10px;pointer-events:none;}\n'
-+'.fselect{width:100%;padding:9px 30px 9px 12px;background:rgba(0,0,0,.85);border:2px solid var(--gd);border-radius:10px;color:var(--g);font-size:12px;font-weight:700;appearance:none;-webkit-appearance:none;outline:none;cursor:pointer;}\n'
++'.fselect{width:100%!important;height:38px!important;padding:0 30px 0 12px!important;background:rgba(0,0,0,.85)!important;border:2px solid var(--gd)!important;border-radius:10px!important;color:var(--g)!important;font-size:12px!important;font-weight:700!important;appearance:none!important;-webkit-appearance:none!important;outline:none!important;cursor:pointer;line-height:34px!important;box-shadow:none!important;box-sizing:border-box!important;}\n'
 +'.fselect option{background:#0a0a0a;color:#fff;}\n'
 +'.search-box{position:relative;}\n'
-+'.search-icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--gd);font-size:13px;pointer-events:none;}\n'
-+'.fsearch{width:100%;padding:9px 12px 9px 30px;background:rgba(0,0,0,.85);border:2px solid var(--gd);border-radius:10px;color:var(--g);font-size:12px;font-weight:700;outline:none;font-family:\'Poppins\',sans-serif;}\n'
-+'.fsearch::placeholder{color:var(--gd);font-weight:600;}\n'
-+'.fsearch:focus{border-color:var(--g);}\n'
++'.search-icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--gd);font-size:11px;pointer-events:none;z-index:2;line-height:1;}\n'
++'.fsearch{width:100%!important;height:38px!important;padding:0 12px 0 28px!important;background:rgba(0,0,0,.85)!important;border:2px solid var(--gd)!important;border-radius:10px!important;color:var(--g)!important;font-size:12px!important;font-weight:700!important;outline:none!important;font-family:\'Poppins\',sans-serif!important;line-height:34px!important;box-shadow:none!important;-webkit-appearance:none!important;appearance:none!important;box-sizing:border-box!important;}\n'
++'.fsearch::placeholder{color:var(--gd)!important;font-weight:600!important;opacity:1!important;}\n'
++'.fsearch:focus{border-color:var(--g)!important;background:rgba(0,0,0,.85)!important;}\n'
 +'.tap-hint{width:90%;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;border:2px solid var(--g);border-radius:10px;background:var(--gs);}\n'
 +'.hint-arrow{font-size:16px;display:inline-block;animation:arrowbounce 1s ease-in-out infinite;line-height:1;}\n'
 +'@keyframes arrowbounce{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}\n'
