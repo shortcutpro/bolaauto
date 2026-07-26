@@ -1339,7 +1339,7 @@ Object.assign(LOGO_DB, {
   "atk": "https://r2.thesportsdb.com/images/media/team/badge/l0zwvl1583254704.png",
   "atk reserves": "https://r2.thesportsdb.com/images/media/team/badge/gsn8ze1589655568.png",
   "atlabara": "https://r2.thesportsdb.com/images/media/team/badge/wbujzy1589638386.png",
-  "atlanta": "https://www.thesportsdb.com/images/media/team/badge/ey0i4o1775792685.png",
+  "atlanta": "https://static.flashscore.com/res/image/data/APPHg3yB-l42IwVUF.png",
   "atlanta silverbacks": "https://r2.thesportsdb.com/images/media/team/badge/ruruqw1431542215.png",
   "atlanta united": "https://r2.thesportsdb.com/images/media/team/badge/ej091x1602103070.png",
   "atlanta united ii": "https://r2.thesportsdb.com/images/media/team/badge/6751ru1629299588.png",
