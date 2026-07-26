@@ -162,10 +162,11 @@ async function fetchHTML(url){
 function preNorm(line){
   return line.trim()
     .replace(/&amp;/g,'&').replace(/&nbsp;/g,' ').replace(/&#160;/g,' ')
+    .replace(/[\u2013\u2014]/g,'-')
     .replace(/\s+/g,' ').trim();
 }
 
-var MATCH_RE = /^(\d{1,2}[\/\-]\d{1,2})[\s,]+(\d{1,2}[:\.]\d{2})(?:\s*WIB)?\s+(.+?)\s+v\.?s\.?\s+(.+?)\s+(\d+\s*[:\-]\s*\d+)\s*$/i;
+var MATCH_RE = /^(\d{1,2}[\/\-]\d{1,2})[\s,]+(\d{1,2}[:\.]\d{2})(?:\s*WIB)?\s+(.+?)\s+v\.?s\.?\s+(.+?)\s+(\d+\s*[:\-\u2013\u2014]\s*\d+)\s*$/i;
 
 function parseRawHtml(html){
   var doc=(new DOMParser()).parseFromString(html,'text/html');
@@ -176,7 +177,7 @@ function parseRawHtml(html){
   var buttons=doc.querySelectorAll('button[data-target],button[data-bs-target]');
   buttons.forEach(function(btn){
     var txt=(btn.textContent||'').toUpperCase();
-    if(txt.indexOf('PREDIKSI')<0) return;
+    if(txt.indexOf('PREDIKSI')<0||txt.indexOf('JADWAL')>=0) return;
     var targetId=(btn.getAttribute('data-target')||btn.getAttribute('data-bs-target')||'').replace('#','');
     if(!targetId) return;
     var body=doc.getElementById(targetId);
@@ -209,7 +210,7 @@ function parseRawHtml(html){
       var clean=preNorm(line);
       if(!clean||clean.length<3) return;
       if(MATCH_RE.test(clean)){ result.push(clean); return; }
-      var isNoise=/https?:\/\/|www\.|@/i.test(clean)||/^\d+$/.test(clean)||clean.length>100||/klik|login|daftar|register|promo|bonus|copyright/i.test(clean);
+      var isNoise=/https?:\/\/|www\.|@/i.test(clean)||/^\d+$/.test(clean)||clean.length>100||/klik|login|daftar|register|promo|bonus|copyright/i.test(clean)||/\bv\.?s\.?\b/i.test(clean)||/^\d/.test(clean);
       if(!isNoise&&/[A-Za-z]/.test(clean)){
         var up=clean.toUpperCase();
         if(result.length===0||result[result.length-1]!==up) result.push(up);
@@ -231,14 +232,26 @@ function parseGeneric(doc){
     doc.querySelectorAll(tag).forEach(function(el){ el.remove(); });
   });
   var text=(doc.body&&(doc.body.innerText||doc.body.textContent))||'';
-  var NOISE=/klik|disini|whatsapp|telegram|instagram|copyright|privacy|https?:|www\.|@/i;
-  var result=[];var capturing=false;var lastLg=false;
-  text.split(/\r?\n/).map(function(l){ return preNorm(l); }).filter(function(l){ return l.length>1; }).forEach(function(line){
+  var NOISE=/klik|disini|whatsapp|telegram|instagram|copyright|privacy|verified|https?:|www\.|@/i;
+  var allLines=text.split(/\r?\n/).map(function(l){ return preNorm(l); }).filter(function(l){ return l.length>1; });
+  // PENTING: ambil HANYA section PREDIKSI (heading "PREDIKSI BOLA ..." terakhir yang
+  // masih punya baris match setelahnya). Section JADWAL (angka handicap) di-skip total.
+  var startIdx=-1;
+  for(var i=0;i<allLines.length;i++){
+    if(!/PREDIKSI\s*BOLA/i.test(allLines[i])) continue;
+    if(/\bv\.?s\.?\b/i.test(allLines[i])) continue;
+    for(var j=i+1;j<allLines.length;j++){ if(MATCH_RE.test(allLines[j])){ startIdx=i; break; } }
+  }
+  var lines=startIdx>=0?allLines.slice(startIdx+1):allLines;
+  // Jika section PREDIKSI ketemu, langsung capture dari awal supaya
+  // header liga pertama (sebelum baris match pertama) tidak hilang.
+  var result=[];var capturing=(startIdx>=0);var lastLg=false;
+  lines.forEach(function(line){
     var isMatch=MATCH_RE.test(line);
     if(!capturing&&isMatch) capturing=true;
     if(!capturing) return;
     if(isMatch){ result.push(line); lastLg=false; return; }
-    var isNoise=NOISE.test(line)||/^\d+$/.test(line)||line.length>90;
+    var isNoise=NOISE.test(line)||/^\d+$/.test(line)||line.length>90||/\bv\.?s\.?\b/i.test(line)||/^\d/.test(line);
     var isLg=!isNoise&&line.length>=3&&/[A-Za-z]/.test(line);
     if(isLg&&!lastLg){ var up=line.toUpperCase(); if(!result.length||result[result.length-1]!==up) result.push(up); lastLg=true; }
     else if(!isLg) lastLg=false;
@@ -265,11 +278,11 @@ function parseMatchLine(line){
   var dtm=tmp.match(/^(\d{1,2}[\/\-]\d{1,2}(?:[\/\-]\d{2,4})?)(?:\s+(\d{1,2}[:.](\d{2}))(?:\s+(WIB|WITA|WIT))?)?/i);
   if(dtm){
     date=dtm[1].replace('-','/');
-    if(dtm[2]){ time=dtm[2].replace('.',':'); if(dtm[4]) time+=' '+dtm[4].toUpperCase(); }
+    if(dtm[2]){ time=dtm[2].replace('.',':'); }
     tmp=tmp.substring(dtm[0].length).trim();
   } else {
     var tm=tmp.match(/^(\d{1,2}[:.](\d{2}))(?:\s+(WIB|WITA|WIT))?/i);
-    if(tm){ time=tm[1].replace('.',':'); if(tm[3]) time+=' '+tm[3].toUpperCase(); tmp=tmp.substring(tm[0].length).trim(); }
+    if(tm){ time=tm[1].replace('.',':'); tmp=tmp.substring(tm[0].length).trim(); }
   }
   var vm=tmp.match(/^(.+?)\s+v\.?s\.?\s+(.+)$/i);
   if(!vm) return null;
@@ -482,7 +495,7 @@ function getLogoUrl(teamName){
 ═══════════════════════════════════════════════ */
 function buildDateRange(leagues){
   var days=[];
-  var BULAN=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agt','Sep','Okt','Nov','Des'];
+  var BULAN=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
   leagues.forEach(function(l){
     l.matches.forEach(function(m){
       if(m.date&&m.date!=='-'){
@@ -501,7 +514,7 @@ function buildDateRange(leagues){
   var yr=new Date().getFullYear();
   var first=days[0],last=days[days.length-1];
   if(first.d===last.d&&first.m===last.m) return first.d+' '+BULAN[first.m]+' '+yr;
-  if(first.m===last.m) return first.d+' - '+last.d+' '+BULAN[first.m]+' '+yr;
+  // Format: "27 Juli - 28 Juli 2026" (bulan selalu ditulis di kedua tanggal)
   return first.d+' '+BULAN[first.m]+' - '+last.d+' '+BULAN[last.m]+' '+yr;
 }
 

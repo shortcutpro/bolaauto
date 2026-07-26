@@ -1522,11 +1522,12 @@ function simpleHash(s) {
 }
 
 // MATCH_RE: dd/mm HH:mm WIB TEAM1 vs TEAM2 SKOR
-var MATCH_RE_FETCH = /^(\d{1,2}[\/\-]\d{1,2})\s+(\d{1,2}[:.]\d{2})(?:\s*WIB)?\s+(.+?)\s+vs?\.?\s+(.+?)\s+(\d+\s*[:\-]\s*\d+)\s*$/i;
+var MATCH_RE_FETCH = /^(\d{1,2}[\/\-]\d{1,2})\s+(\d{1,2}[:.]\d{2})(?:\s*WIB)?\s+(.+?)\s+vs?\.?\s+(.+?)\s+(\d+\s*[:\-\u2013\u2014]\s*\d+)\s*$/i;
 
 function preNorm(line) {
     return line.trim()
         .replace(/&amp;/g, '&').replace(/&nbsp;/g, ' ').replace(/&#160;/g, ' ')
+        .replace(/[\u2013\u2014]/g, '-')
         .replace(/\s+/g, ' ').trim();
 }
 
@@ -1562,7 +1563,7 @@ function parseRawHtml(html) {
         var btnText = (btn.textContent || btn.innerText || '').trim();
 
         // Filter: hanya yang teksnya mengandung "PREDIKSI"
-        if (!/PREDIKSI/i.test(btnText)) return;
+        if (!/PREDIKSI/i.test(btnText) || /JADWAL/i.test(btnText)) return;
 
         // Ambil target panel ID dari attribute
         var targetId = btn.getAttribute('data-target') || btn.getAttribute('data-bs-target') || '';
@@ -1640,7 +1641,9 @@ function parseRawHtml(html) {
             var isNoise = /https?:\/\/|www\.|@/i.test(clean)
                 || /^\d+$/.test(clean)
                 || clean.length > 100
-                || /klik|login|daftar|register|promo|bonus|copyright|shortq/i.test(clean);
+                || /klik|login|daftar|register|promo|bonus|copyright|shortq/i.test(clean)
+                || /\bv\.?s\.?\b/i.test(clean)
+                || /^\d/.test(clean);
 
             if (!isNoise && /[A-Za-z]/.test(clean)) {
                 var up = clean.toUpperCase();
@@ -1676,14 +1679,23 @@ function parseGenericText(doc) {
     });
     var text = (doc.body && (doc.body.innerText || doc.body.textContent)) || '';
     var allLines = text.split(/\r?\n/).map(function(l){ return preNorm(l); }).filter(function(l){ return l.length > 1; });
-    var NOISE_RE = /klik|disini|whatsapp|telegram|instagram|copyright|privacy|https?:|www\.|@/i;
-    var result = []; var capturing = false; var lastWasLeague = false;
+    var NOISE_RE = /klik|disini|whatsapp|telegram|instagram|copyright|privacy|verified|https?:|www\.|@/i;
+    // PENTING: ambil HANYA section PREDIKSI (skip section JADWAL berisi angka handicap)
+    var startIdx = -1;
+    for (var i = 0; i < allLines.length; i++) {
+        if (!/PREDIKSI\s*BOLA/i.test(allLines[i])) continue;
+        if (/\bv\.?s\.?\b/i.test(allLines[i])) continue;
+        for (var j = i + 1; j < allLines.length; j++) { if (MATCH_RE_FETCH.test(allLines[j])) { startIdx = i; break; } }
+    }
+    if (startIdx >= 0) allLines = allLines.slice(startIdx + 1);
+    // Jika section PREDIKSI ketemu, langsung capture supaya header liga pertama tidak hilang
+    var result = []; var capturing = (startIdx >= 0); var lastWasLeague = false;
     allLines.forEach(function(line) {
         var isMatch = MATCH_RE_FETCH.test(line);
         if (!capturing && isMatch) capturing = true;
         if (!capturing) return;
         if (isMatch) { result.push(line); lastWasLeague = false; return; }
-        var isNoise = NOISE_RE.test(line) || /^\d+$/.test(line) || line.length > 90;
+        var isNoise = NOISE_RE.test(line) || /^\d+$/.test(line) || line.length > 90 || /\bv\.?s\.?\b/i.test(line) || /^\d/.test(line);
         var isLeague = !isNoise && line.length >= 3 && /[A-Za-z]/.test(line);
         if (isLeague && !lastWasLeague) {
             var up = line.toUpperCase();
