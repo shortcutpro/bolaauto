@@ -11,8 +11,8 @@ var MBAPPE_GIF    = 'https://photoku.io/images/2026/05/31/giffmbappee-finall.gif
 var MARQUEE_TEXT  = '👑 PREDIKSI BOLA TERUPDATE ! Tunggu apa lagi? Daftar di HOKBENTOTO dan nikmati pengalaman taruhan terbaik! 👑';
 var COLOR_MAIN    = '#FFD700';
 var COLOR_TEXT    = '#fff8d8';
-var BG_IMAGE      = 'https://cdn.areabermain.club/assets/cdn/az5/2026/03/02/20260302/997f37bf3bc90016a5e32ae52406c5c4/background-web-hokbentoto-1.jpg';
-var BG_OVERLAY    = 'rgba(10,7,0,0.55), rgba(19,16,0,0.62)';
+var BG_IMAGE      = '';
+var BG_OVERLAY    = '#000000, #000000';
 var AUTO_REFRESH  = 5 * 60 * 1000; // 5 menit
 
 var PROXIES = [

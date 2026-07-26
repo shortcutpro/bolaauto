@@ -11,8 +11,8 @@ var MBAPPE_GIF    = 'https://photoku.io/images/2026/05/31/giffmbappee-finall.gif
 var MARQUEE_TEXT  = '👑 PREDIKSI BOLA TERUPDATE ! Tunggu apa lagi? Daftar di BANDAR80 dan nikmati pengalaman taruhan terbaik! 👑';
 var COLOR_MAIN    = '#29A8E0';
 var COLOR_TEXT    = '#e6f6ff';
-var BG_IMAGE      = 'https://cdn.areabermain.club/assets/cdn/az5/2026/03/02/20260302/20e8efc43cfbf551408b31932d699826/background-web-bandar80.jpg';
-var BG_OVERLAY    = 'rgba(5,24,38,0.55), rgba(8,34,56,0.62)';
+var BG_IMAGE      = '';
+var BG_OVERLAY    = '#000000, #000000';
 var AUTO_REFRESH  = 5 * 60 * 1000; // 5 menit
 
 var PROXIES = [
