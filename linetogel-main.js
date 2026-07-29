@@ -29,7 +29,7 @@ var PROXIES = [
    Set JPK_ENABLED = false untuk kembali ke sumber lama.
 ═══════════════════════════════════════════════ */
 var JPK_ENABLED = true;
-var JPK_BASE    = 'https://jpkoloni4d.pagesco.de/prediksi-bola-';
+var JPK_BASE    = 'https://jpbolepalngi.pagesco.de/prediksi-bola-';
 var JPK_BULAN   = ['januari','februari','maret','april','mei','juni','juli','agustus','september','oktober','november','desember'];
 
 function jpkTanggalWIB(offsetHari){
@@ -798,7 +798,7 @@ async function loadAndRender(){
 
     var lines = null;
 
-    // 1) SUMBER UTAMA: jpkoloni4d — URL otomatis mengikuti tanggal hari ini (WIB)
+    // 1) SUMBER UTAMA: jpbolepalngi — URL otomatis mengikuti tanggal hari ini (WIB)
     if (JPK_ENABLED) {
       var jpkUrls = jpkDaftarUrl();
       for (var ju = 0; ju < jpkUrls.length && !lines; ju++) {
