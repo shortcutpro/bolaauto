@@ -15,6 +15,7 @@ Generator prediksi bola multi-brand — **pure HTML/JS, tanpa PHP backend.** 100
 - [Auto Embed (`*-auto.html`)](#-auto-embed---autohtml)
 - [Tambah Logo Manual](#-tambah-logo-manual)
 - [Konfigurasi Brand](#-konfigurasi-brand)
+- [Lightweight Embed (External Script)](#-lightweight-embed-external-script-no-inline-js)
 - [Fitur](#-fitur)
 
 ---
@@ -141,6 +142,76 @@ var SITES = {
   }
 };
 ```
+
+---
+
+## 🧩 Lightweight Embed (External Script, No Inline JS)
+
+Versi embed ringan — cuma `<div>` + `<style>` + beberapa `<script src>` eksternal, **tanpa JavaScript inline**. Cocok untuk WordPress/CMS yang strip inline `<script>`. Warna loading state mengikuti warna brand masing-masing.
+
+Tersedia untuk **ZIA TOGEL** dan **LINE TOGEL** (pakai `ziatogel-main.js` / `linetogel-main.js` yang sudah ada di repo ini).
+
+<details>
+<summary><strong>ZIA TOGEL</strong> — warna <code>#FFC800</code> (gold)</summary>
+
+```html
+<!-- ZIA TOGEL Auto Embed v4 — NO inline JavaScript -->
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<div id="ziatogel-root"></div>
+<style>
+#ziatogel-root .ibc-loading-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:320px;gap:14px;font-family:'Poppins',sans-serif;background:#000000;border-radius:12px;padding:30px 20px;}
+#ziatogel-root .ibc-spinner{width:46px;height:46px;border:4px solid #FFC80033;border-top-color:#FFC800;border-radius:50%;animation:ibcSpin .7s linear infinite;}
+@keyframes ibcSpin{to{transform:rotate(360deg)}}
+#ziatogel-root .ibc-loading-text{color:#FFC800;font-size:13px;font-weight:700;letter-spacing:1.5px;text-shadow:0 0 10px #FFC80080;text-align:center;}
+#ziatogel-root .ibc-loading-sub{color:#FFC80080;font-size:10px;letter-spacing:1px;text-align:center;margin-top:-8px;}
+</style>
+<script src="https://shortcutpro.github.io/bolaauto/logo-db-0.js"></script>
+<script src="https://shortcutpro.github.io/bolaauto/logo-db-1.js"></script>
+<script src="https://shortcutpro.github.io/bolaauto/logo-db-2.js"></script>
+<script src="https://shortcutpro.github.io/bolaauto/logo-db-3.js"></script>
+<script src="https://shortcutpro.github.io/bolaauto/logo-db-4.js"></script>
+<script src="https://shortcutpro.github.io/bolaauto/logo-db-5.js"></script>
+<script src="https://shortcutpro.github.io/bolaauto/logo-db-6.js"></script>
+<script src="https://shortcutpro.github.io/bolaauto/logo-db-7.js"></script>
+<script src="https://shortcutpro.github.io/bolaauto/logo-db-8.js"></script>
+<script src="https://shortcutpro.github.io/bolaauto/logo-db-9.js"></script>
+<script src="https://shortcutpro.github.io/bolaauto/logo-db.js"></script>
+<script src="https://shortcutpro.github.io/bolaauto/ziatogel-main.js?v=5"></script>
+```
+
+</details>
+
+<details>
+<summary><strong>LINE TOGEL</strong> — warna <code>#CE4FFF</code> (neon purple)</summary>
+
+```html
+<!-- LINE TOGEL Auto Embed v4 — NO inline JavaScript -->
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<div id="linetogel-root"></div>
+<style>
+#linetogel-root .ibc-loading-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:320px;gap:14px;font-family:'Poppins',sans-serif;background:#000000;border-radius:12px;padding:30px 20px;}
+#linetogel-root .ibc-spinner{width:46px;height:46px;border:4px solid #CE4FFF33;border-top-color:#CE4FFF;border-radius:50%;animation:ibcSpin .7s linear infinite;}
+@keyframes ibcSpin{to{transform:rotate(360deg)}}
+#linetogel-root .ibc-loading-text{color:#CE4FFF;font-size:13px;font-weight:700;letter-spacing:1.5px;text-shadow:0 0 10px #CE4FFF80;text-align:center;}
+#linetogel-root .ibc-loading-sub{color:#CE4FFF80;font-size:10px;letter-spacing:1px;text-align:center;margin-top:-8px;}
+</style>
+<script src="https://shortcutpro.github.io/bolaauto/logo-db-0.js"></script>
+<script src="https://shortcutpro.github.io/bolaauto/logo-db-1.js"></script>
+<script src="https://shortcutpro.github.io/bolaauto/logo-db-2.js"></script>
+<script src="https://shortcutpro.github.io/bolaauto/logo-db-3.js"></script>
+<script src="https://shortcutpro.github.io/bolaauto/logo-db-4.js"></script>
+<script src="https://shortcutpro.github.io/bolaauto/logo-db-5.js"></script>
+<script src="https://shortcutpro.github.io/bolaauto/logo-db-6.js"></script>
+<script src="https://shortcutpro.github.io/bolaauto/logo-db-7.js"></script>
+<script src="https://shortcutpro.github.io/bolaauto/logo-db-8.js"></script>
+<script src="https://shortcutpro.github.io/bolaauto/logo-db-9.js"></script>
+<script src="https://shortcutpro.github.io/bolaauto/logo-db.js"></script>
+<script src="https://shortcutpro.github.io/bolaauto/linetogel-main.js?v=5"></script>
+```
+
+</details>
+
+> Ganti `?v=5` tiap update `*-main.js` biar cache browser/CDN kepaksa refresh.
 
 ---
 
