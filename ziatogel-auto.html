@@ -688,11 +688,28 @@ function buildDateRange(leagues){
   if(!days.length){
     var n=new Date(); return n.getDate()+' '+BULAN[n.getMonth()]+' '+n.getFullYear();
   }
-  days.sort(function(a,b){ return a.m!==b.m?a.m-b.m:a.d-b.d; });
   var yr=new Date().getFullYear();
-  var first=days[0],last=days[days.length-1];
+  // Lintas tahun: kalau ada Desember DAN Januari bercampur, anggap Januari
+  // milik tahun berikutnya supaya urutan & selisih hari benar.
+  var adaDes=days.some(function(x){return x.m===11;});
+  var adaJan=days.some(function(x){return x.m===0;});
+  var wrapYear=adaDes&&adaJan;
+  function toDate(o){ return new Date(o.m===0&&wrapYear?yr+1:yr, o.m, o.d); }
+  days.sort(function(a,b){ return toDate(a)-toDate(b); });
+  var first=days[0];
+  // 'last' = tanggal terjauh, TAPI dibatasi maksimal H+1 dari 'first'.
+  // Mencegah tanggal Big Match berjadwal jauh (mis. 31 Agustus) membuat
+  // label header jadi '31 Juli - 31 Agustus'. Pakai Date -> lintas bulan/tahun aman.
+  var dMaxAllowed=new Date(toDate(first).getTime()+86400000); // besok
+  var last=first;
+  for(var i=days.length-1;i>=0;i--){
+    if(toDate(days[i])<=dMaxAllowed){ last=days[i]; break; }
+  }
+  var yrLast=(last.m===0&&wrapYear)?yr+1:yr;
   if(first.d===last.d&&first.m===last.m) return first.d+' '+BULAN[first.m]+' '+yr;
-  // Format: "27 Juli - 28 Juli 2026" (bulan selalu ditulis di kedua tanggal)
+  // Format: "31 Juli - 1 Agustus 2026" / "31 Desember 2026 - 1 Januari 2027"
+  if(wrapYear&&first.m===11&&last.m===0)
+    return first.d+' '+BULAN[first.m]+' '+yr+' - '+last.d+' '+BULAN[last.m]+' '+yrLast;
   return first.d+' '+BULAN[first.m]+' - '+last.d+' '+BULAN[last.m]+' '+yr;
 }
 
