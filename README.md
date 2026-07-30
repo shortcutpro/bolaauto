@@ -1,225 +1,177 @@
-# ⚽ Prediksi Bola Auto Generator — GitHub Pages Edition
+# ⚽ BOLAAUTO — Widget Prediksi Bola Otomatis
 
-Generator prediksi bola multi-brand — **pure HTML/JS, tanpa PHP backend.** 100% static, deploy gratis di GitHub Pages.
-
-**Sites (10):** HOKBENTOTO · BANDAR80 · TVTOTO · WATITOTO · MARKASWD · LINE TOGEL · ZIA TOGEL · INDRA TOGEL · YOWES TOGEL · MANCINGDUIT
+Widget prediksi bola **multi-brand** yang link sumbernya **berganti sendiri mengikuti tanggal hari ini** — tanpa edit manual setiap hari.
 
 ---
 
-## 📑 Daftar Isi
+## 🏷️ Brand yang Tersedia
 
-- [Live Demo](#-live-demo)
-- [Struktur Repo](#-struktur-repo)
-- [Deploy ke GitHub Pages](#-deploy-ke-github-pages)
-- [Format Input Prediksi](#-format-input-prediksi)
-- [Auto Embed (`*-auto.html`)](#-auto-embed---autohtml)
-- [Tambah Logo Manual](#-tambah-logo-manual)
-- [Konfigurasi Brand](#-konfigurasi-brand)
-- [Lightweight Embed (External Script)](#-lightweight-embed-external-script-no-inline-js)
-- [Fitur](#-fitur)
-
----
-
-## 🌐 Live Demo
-
-> Deploy ke GitHub Pages: `https://<username>.github.io/<repo>/`
-
----
-
-## 📁 Struktur Repo
-
-```
-repo/
-├── index.html               ← Menu pilih site
-│
-├── hokbentoto.html           ← Generator HOKBENTOTO   (Black & Gold)
-├── bandar80.html             ← Generator BANDAR80     (Sky Blue)
-├── tvtoto.html                ← Generator TVTOTO       (Crimson Red)
-├── watitoto.html              ← Generator WATITOTO     (Inferno Fire)
-├── markaswd.html              ← Generator MARKASWD     (Royal Gold)
-├── linetogel.html             ← Generator LINE TOGEL   (Neon Purple)
-├── ziatogel.html              ← Generator ZIA TOGEL    (Yellow & Blue)
-├── indratogel.html            ← Generator INDRA TOGEL  (Violet)
-├── yowestogel.html            ← Generator YOWES TOGEL  (Red & Gold)
-├── mancingduit.html           ← Generator MANCINGDUIT  (Ocean Blue)
-│
-├── hokbentoto-auto.html      ← Auto Embed HOKBENTOTO (standalone, LOGO_DB inline)
-├── bandar80-auto.html        ← Auto Embed BANDAR80
-├── tvtoto-auto.html           ← Auto Embed TVTOTO
-├── watitoto-auto.html         ← Auto Embed WATITOTO
-├── markaswd-auto.html         ← Auto Embed MARKASWD
-├── linetogel-auto.html        ← Auto Embed LINE TOGEL
-├── ziatogel-auto.html         ← Auto Embed ZIA TOGEL
-├── indratogel-auto.html       ← Auto Embed INDRA TOGEL
-├── yowestogel-auto.html       ← Auto Embed YOWES TOGEL
-├── mancingduit-auto.html      ← Auto Embed MANCINGDUIT
-│
-├── logo-db-0.js … logo-db-9.js  ← Database logo tim (30.000+ entries)
-├── logo-db.js                 ← ★ INPUT LOGO MANUAL (override, di-load terakhir)
-│
-└── README.md
-```
-
----
-
-## 🚀 Deploy ke GitHub Pages
-
-1. Push semua file ke repo GitHub.
-2. **Settings → Pages → Source:** branch utama, folder `/ (root)`.
-3. Akses via `https://<username>.github.io/<repo>/`:
-
-   | Site | URL |
-   |---|---|
-   | HOKBENTOTO | `.../hokbentoto.html` |
-   | BANDAR80 | `.../bandar80.html` |
-   | TVTOTO | `.../tvtoto.html` |
-   | WATITOTO | `.../watitoto.html` |
-   | MARKASWD | `.../markaswd.html` |
-   | LINE TOGEL | `.../linetogel.html` |
-   | ZIA TOGEL | `.../ziatogel.html` |
-   | INDRA TOGEL | `.../indratogel.html` |
-   | YOWES TOGEL | `.../yowestogel.html` |
-   | MANCINGDUIT | `.../mancingduit.html` |
-
----
-
-## 📝 Format Input Prediksi
-
-```
-WORLD CUP 2026 [ IN CANADA, MEXICO & USA ]
-19/07 04:00 WIB France VS England 0 : 2
-
-NORWAY ELITESERIEN
-18/07 19:00 WIB [6] Ham-Kam VS [1] Tromso 2 : 1
-18/07 21:00 WIB [15] Kristiansund VS [7] Sarpsborg 08 1 : 3
-```
-
-- Baris tanpa jam = **nama liga**.
-- `[6]`, `[1]` dsb (angka klasemen) otomatis **di-strip** — tidak ikut tampil.
-- Skor bisa pakai `:` atau `-`.
-- Suffix `[W]`, `U19`, `U21` dsb otomatis dibersihkan saat lookup logo.
-
----
-
-## ⚡ Auto Embed (`*-auto.html`)
-
-Versi standalone, mengikuti `hkb77-auto-embed.html` dari repo `leo08`.
-
-- **Auto fetch** prediksi dari `https://shortq.xyz/prediksibola` (multi-proxy fallback) + auto refresh tiap 5 menit.
-- `LOGO_DB` **sudah tertanam di dalam file** — tidak butuh `logo-db-*.js` eksternal.
-- Background, logo, favicon, dan warna menyesuaikan brand masing-masing.
-- **Cara pakai:** buka langsung, atau paste seluruh isi file ke halaman/blog.
-
----
-
-## 🔧 Tambah Logo Manual
-
-Edit `logo-db.js` — file ini di-load **paling akhir**, jadi otomatis menimpa database utama:
-
-```js
-Object.assign(LOGO_DB, {
-    "manchester united": "https://...url-logo.png",
-    "ham-kam": "https://...url-logo.png",
-});
-```
-
-> Key harus **lowercase**.
-
----
-
-## ⚙️ Konfigurasi Brand
-
-Tiap file HTML punya blok `SITES` sendiri (logo, favicon, background, warna):
-
-```js
-var SITES = {
-  hokbentoto: {
-    name: 'HOKBENTOTO',
-    logo: 'https://...',
-    favicon: 'https://...',
-    bg: 'https://...background.jpg',
-    cssVars: { '--primary': '#FFD700', ... }
-  }
-};
-```
-
----
-
-## 🧩 Lightweight Embed (External Script, No Inline JS)
-
-Versi embed ringan — cuma `<div>` + `<style>` + beberapa `<script src>` eksternal, **tanpa JavaScript inline**. Cocok untuk WordPress/CMS yang strip inline `<script>`. Warna loading state mengikuti warna brand masing-masing.
-
-Tersedia untuk **ZIA TOGEL** dan **LINE TOGEL** (pakai `ziatogel-main.js` / `linetogel-main.js` yang sudah ada di repo ini).
-
-<details>
-<summary><strong>ZIA TOGEL</strong> — warna <code>#FFC800</code> (gold)</summary>
-
-```html
-<!-- ZIA TOGEL Auto Embed v4 — NO inline JavaScript -->
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-<div id="ziatogel-root"></div>
-<style>
-#ziatogel-root .ibc-loading-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:320px;gap:14px;font-family:'Poppins',sans-serif;background:#000000;border-radius:12px;padding:30px 20px;}
-#ziatogel-root .ibc-spinner{width:46px;height:46px;border:4px solid #FFC80033;border-top-color:#FFC800;border-radius:50%;animation:ibcSpin .7s linear infinite;}
-@keyframes ibcSpin{to{transform:rotate(360deg)}}
-#ziatogel-root .ibc-loading-text{color:#FFC800;font-size:13px;font-weight:700;letter-spacing:1.5px;text-shadow:0 0 10px #FFC80080;text-align:center;}
-#ziatogel-root .ibc-loading-sub{color:#FFC80080;font-size:10px;letter-spacing:1px;text-align:center;margin-top:-8px;}
-</style>
-<script src="https://shortcutpro.github.io/bolaauto/logo-db-0.js"></script>
-<script src="https://shortcutpro.github.io/bolaauto/logo-db-1.js"></script>
-<script src="https://shortcutpro.github.io/bolaauto/logo-db-2.js"></script>
-<script src="https://shortcutpro.github.io/bolaauto/logo-db-3.js"></script>
-<script src="https://shortcutpro.github.io/bolaauto/logo-db-4.js"></script>
-<script src="https://shortcutpro.github.io/bolaauto/logo-db-5.js"></script>
-<script src="https://shortcutpro.github.io/bolaauto/logo-db-6.js"></script>
-<script src="https://shortcutpro.github.io/bolaauto/logo-db-7.js"></script>
-<script src="https://shortcutpro.github.io/bolaauto/logo-db-8.js"></script>
-<script src="https://shortcutpro.github.io/bolaauto/logo-db-9.js"></script>
-<script src="https://shortcutpro.github.io/bolaauto/logo-db.js"></script>
-<script src="https://shortcutpro.github.io/bolaauto/ziatogel-main.js?v=5"></script>
-```
-
-</details>
-
-<details>
-<summary><strong>LINE TOGEL</strong> — warna <code>#CE4FFF</code> (neon purple)</summary>
-
-```html
-<!-- LINE TOGEL Auto Embed v4 — NO inline JavaScript -->
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-<div id="linetogel-root"></div>
-<style>
-#linetogel-root .ibc-loading-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:320px;gap:14px;font-family:'Poppins',sans-serif;background:#000000;border-radius:12px;padding:30px 20px;}
-#linetogel-root .ibc-spinner{width:46px;height:46px;border:4px solid #CE4FFF33;border-top-color:#CE4FFF;border-radius:50%;animation:ibcSpin .7s linear infinite;}
-@keyframes ibcSpin{to{transform:rotate(360deg)}}
-#linetogel-root .ibc-loading-text{color:#CE4FFF;font-size:13px;font-weight:700;letter-spacing:1.5px;text-shadow:0 0 10px #CE4FFF80;text-align:center;}
-#linetogel-root .ibc-loading-sub{color:#CE4FFF80;font-size:10px;letter-spacing:1px;text-align:center;margin-top:-8px;}
-</style>
-<script src="https://shortcutpro.github.io/bolaauto/logo-db-0.js"></script>
-<script src="https://shortcutpro.github.io/bolaauto/logo-db-1.js"></script>
-<script src="https://shortcutpro.github.io/bolaauto/logo-db-2.js"></script>
-<script src="https://shortcutpro.github.io/bolaauto/logo-db-3.js"></script>
-<script src="https://shortcutpro.github.io/bolaauto/logo-db-4.js"></script>
-<script src="https://shortcutpro.github.io/bolaauto/logo-db-5.js"></script>
-<script src="https://shortcutpro.github.io/bolaauto/logo-db-6.js"></script>
-<script src="https://shortcutpro.github.io/bolaauto/logo-db-7.js"></script>
-<script src="https://shortcutpro.github.io/bolaauto/logo-db-8.js"></script>
-<script src="https://shortcutpro.github.io/bolaauto/logo-db-9.js"></script>
-<script src="https://shortcutpro.github.io/bolaauto/logo-db.js"></script>
-<script src="https://shortcutpro.github.io/bolaauto/linetogel-main.js?v=5"></script>
-```
-
-</details>
-
-> Ganti `?v=5` tiap update `*-main.js` biar cache browser/CDN kepaksa refresh.
+| Brand | Auto | Embed | Main JS | Static |
+|-------|------|-------|---------|--------|
+| **HOKBENTOTO** | ✅ `hokbentoto-auto.html` | ✅ `hokbentoto-embed.html` | ✅ `hokbentoto-main.js` | ✅ `hokbentoto.html` |
+| **BANDAR80** | ✅ `bandar80-auto.html` | ✅ `bandar80-embed.html` | ✅ `bandar80-main.js` | ✅ `bandar80.html` |
+| **LINETOGEL** | ✅ `linetogel-auto.html` | ❌ | ✅ `linetogel-main.js` | ✅ `linetogel.html` |
+| **ZIATOGEL** | ✅ `ziatogel-auto.html` | ❌ | ✅ `ziatogel-main.js` | ✅ `ziatogel.html` |
 
 ---
 
 ## ✨ Fitur
 
-- ✅ Auto fetch prediksi via proxy + auto refresh 60 detik
-- ✅ Logo lookup 8-step fuzzy (30k+ entries) + SVG fallback inisial tim
-- ✅ `logo-db.js` untuk input logo manual (override)
-- ✅ Tanggal otomatis + custom color picker per brand
-- ✅ Output HTML siap embed, responsive mobile/desktop
-- ✅ 100% static — deploy gratis di GitHub Pages
+- **Auto tanggal (WIB)** — URL sumber dibentuk otomatis mengikuti tanggal hari ini. Contoh: `prediksi-bola-28-29-juli-2026` → besok otomatis jadi `prediksi-bola-29-30-juli-2026`.
+- **Big Match (Pertandingan Spesial)** — section kartu Big Match tampil di bawah marquee, auto-scroll berjalan dari kiri ke kanan + efek shine kaca kilat.
+- **Fallback berlapis** — halaman hari ini belum terbit → pakai kemarin → sumber down total → fallback ke sumber cadangan (shortq.xyz).
+- **Database logo ±30.000 tim** — fuzzy lookup 6-step bertingkat, fallback ke SVG inisial otomatis.
+- **Auto-refresh 5 menit** — halaman yang sudah terbuka ikut update sendiri tanpa reload manual.
+- **Tema per brand** — warna otomatis menyesuaikan tiap brand.
+
+---
+
+## 🚀 Cara Pasang (Embed via iframe)
+
+Tempel kode di bawah ke halaman WordPress (Custom HTML block) atau halaman web mana pun. Tinggi iframe menyesuaikan isi konten secara otomatis.
+
+### HOKBENTOTO
+
+```html
+<iframe id="hkb-embed" src="https://shortcutpro.github.io/bolaauto/hokbentoto-embed.html" style="width:100%;height:1400px;border:0;display:block;background:#000;" scrolling="no"></iframe>
+<script>
+window.addEventListener('message', function (e) {
+    if (e.data && e.data.ziaEmbedHeight) {
+        var f = document.getElementById('hkb-embed');
+        if (f) f.style.height = e.data.ziaEmbedHeight + 'px';
+    }
+});
+</script>
+```
+
+### BANDAR80
+
+```html
+<iframe id="bdr-embed" src="https://shortcutpro.github.io/bolaauto/bandar80-embed.html" style="width:100%;height:1400px;border:0;display:block;background:#000;" scrolling="no"></iframe>
+<script>
+window.addEventListener('message', function (e) {
+    if (e.data && e.data.ziaEmbedHeight) {
+        var f = document.getElementById('bdr-embed');
+        if (f) f.style.height = e.data.ziaEmbedHeight + 'px';
+    }
+});
+</script>
+```
+
+> **Catatan:** Script di bawah iframe berfungsi menyesuaikan tinggi iframe secara otomatis. Biarkan `scrolling="no"` agar tidak muncul scrollbar ganda. Nilai `height:1400px` hanya tinggi awal — setelah data masuk, tinggi menyesuaikan sendiri.
+
+---
+
+## 📂 Struktur File
+
+```
+bolaauto/
+├── index.html                  # Halaman indeks
+│
+├── hokbentoto-embed.html       # Loader iframe HOKBENTOTO
+├── hokbentoto-main.js          # Logika utama HOKBENTOTO
+├── hokbentoto-auto.html        # Standalone (logo tertanam, tanpa file eksternal)
+├── hokbentoto.html             # Halaman static HOKBENTOTO
+│
+├── bandar80-embed.html         # Loader iframe BANDAR80
+├── bandar80-main.js            # Logika utama BANDAR80
+├── bandar80-auto.html          # Standalone BANDAR80
+├── bandar80.html               # Halaman static BANDAR80
+│
+├── linetogel-main.js           # Logika utama LINETOGEL
+├── linetogel-auto.html         # Standalone LINETOGEL
+├── linetogel.html              # Halaman static LINETOGEL
+│
+├── ziatogel-main.js            # Logika utama ZIATOGEL
+├── ziatogel-auto.html          # Standalone ZIATOGEL
+├── ziatogel.html               # Halaman static ZIATOGEL
+│
+├── logo-db-0.js … logo-db-9.js # Database logo utama (±30.000 entri)
+└── logo-db.js                  # Override logo manual (di-load terakhir)
+```
+
+### Jenis File
+
+| Jenis | Keterangan |
+|-------|-----------|
+| `*-embed.html` | Loader iframe — memuat logo-db + main.js berurutan. Dipakai dengan kode embed di atas. |
+| `*-main.js` | Logika utama: fetch sumber, parser data, render widget, Big Match. |
+| `*-auto.html` | Versi standalone (±2,4 MB) — LOGO_DB sudah tertanam di dalam file, tidak butuh file eksternal. Tinggal buka langsung. |
+| `*.html` (tanpa suffix) | Halaman static. |
+| `logo-db-0..9.js` | Database logo utama, dipecah 10 file. |
+| `logo-db.js` | Override logo manual — menimpa entri database utama. |
+
+---
+
+## 🔄 Cara Kerja Auto-Update
+
+```
+┌─────────────────────────────────────────────────────┐
+│  Widget dibuka / auto-refresh 5 menit               │
+│  ↓                                                  │
+│  Bentuk URL sesuai tanggal WIB hari ini             │
+│  contoh: prediksi-bola-29-30-juli-2026              │
+│  ↓                                                  │
+│  Fetch halaman sumber via CORS proxy                │
+│  ↓                                                  │
+│  Parse daftar pertandingan + Big Match              │
+│  dari HTML yang SAMA (satu fetch, dua data)         │
+│  ↓                                                  │
+│  Render widget dengan logo lookup + tema brand      │
+└─────────────────────────────────────────────────────┘
+
+Fallback:
+  URL hari ini 404 → coba URL kemarin
+  Semua URL gagal → fallback ke sumber cadangan
+```
+
+Saat halaman sumber diperbarui (baik ganti tanggal maupun update Big Match), widget ikut update pada fetch berikutnya. Tidak perlu edit apa pun setiap hari.
+
+---
+
+## 🔧 Konfigurasi
+
+Semua konfigurasi ada di dalam `{brand}-main.js` (atau `{brand}-auto.html`):
+
+| Setting | Lokasi | Default |
+|---------|--------|---------|
+| Domain sumber | `var JPK_BASE = '...'` | `https://jpbolepalngi.pagesco.de/prediksi-bola-` |
+| On/off sumber utama | `var JPK_ENABLED = true` | `true` |
+| Sumber cadangan | `var SOURCE_URL = '...'` | `https://shortq.xyz/prediksibola` |
+| Interval refresh | `var AUTO_REFRESH = 5 * 60 * 1000` | 5 menit |
+| Kecepatan scroll Big Match | `animation:bmScroll 40s` | 40 detik per loop |
+| Kecepatan efek shine | `animation:bmShine 3.6s` | 3,6 detik per kilat |
+
+**Matikan sumber utama** (balik ke sumber cadangan):
+```js
+var JPK_ENABLED = false;
+```
+
+---
+
+## 🎨 Update Logo
+
+Edit **`logo-db.js`** untuk menambah atau mengganti logo tim. File ini di-load paling akhir sehingga entri di dalamnya menimpa database utama.
+
+```js
+// logo-db.js
+Object.assign(window.LOGO_DB, {
+  "nama tim lowercase": "https://url-logo.png",
+  "tim baru": "https://url-logo-baru.png"
+});
+```
+
+Berlaku untuk semua `*-embed.html` dan `*-main.js`.
+
+> ⚠️ File `*-auto.html` (2,4 MB) memiliki LOGO_DB tertanam — perubahan `logo-db.js` tidak berlaku untuk file auto. Perlu regenerasi database inline.
+
+---
+
+## 📋 Changelog
+
+| Tanggal | Perubahan |
+|---------|-----------|
+| 31 Jul 2026 | Big Match v3: border & warna disamakan dengan tabel liga, auto-scroll berjalan + efek shine kaca kilat |
+| 30 Jul 2026 | Tambah section Big Match (Pertandingan Spesial) dari halaman sumber |
+| 29 Jul 2026 | Domain sumber diganti ke `jpbolepalngi.pagesco.de` |
+| 28 Jul 2026 | Sumber utama diganti ke jpkoloni4d — URL otomatis ikut tanggal WIB + fallback berlapis |
