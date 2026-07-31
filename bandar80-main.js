@@ -6,7 +6,7 @@
 ═══════════════════════════════════════════════ */
 var SOURCE_URL    = 'https://shortq.xyz/prediksibola'; // sumber data prediksi
 var SITE_NAME     = 'BANDAR80';
-var SITE_LOGO     = 'https://bandar71.com/resources/images/logo.png';
+var SITE_LOGO     = 'https://cdn.areabermain.club/assets/cdn/az5/2025/10/08/20251008/8edbdf7466988b21c63fa66e0245021f/logo-new-bandar80.png';
 var MBAPPE_GIF    = 'https://photoku.io/images/2026/05/31/giffmbappee-finall.gif';
 var MARQUEE_TEXT  = '👑 PREDIKSI BOLA TERUPDATE ! Tunggu apa lagi? Daftar di BANDAR80 dan nikmati pengalaman taruhan terbaik! 👑';
 var COLOR_MAIN    = '#29A8E0';
@@ -235,7 +235,7 @@ function showLoading(msg, pct){
   var hasBar = pctVal >= 0;
   root.innerHTML =
     '<div class="ibc-loading-wrap">'+
-    '<img src="https://bandar71.com/resources/images/logo.png" alt="BANDAR80" style="width:110px;max-height:72px;object-fit:contain;filter:drop-shadow(0 0 16px #29A8E0);margin-bottom:8px;"/>'+
+    '<img src="https://cdn.areabermain.club/assets/cdn/az5/2025/10/08/20251008/8edbdf7466988b21c63fa66e0245021f/logo-new-bandar80.png" alt="BANDAR80" style="width:110px;max-height:72px;object-fit:contain;filter:drop-shadow(0 0 16px #29A8E0);margin-bottom:8px;"/>'+
     '<div class="ibc-spinner"></div>'+
     '<div class="ibc-loading-text">⚽ '+(msg||'Memuat Prediksi BANDAR80…')+'</div>'+
     (hasBar?
