@@ -133,6 +133,78 @@ Saat halaman sumber diperbarui, widget ikut update pada fetch berikutnya. Tidak 
 
 ---
 
+### Pertandingan Spesial di output generator
+
+Output yang dihasilkan generator sekarang **sama persis** dengan widget `*-main.js`: section
+Pertandingan Spesial muncul tepat di bawah marquee, lengkap dengan CSS `.bm-*`, efek shine,
+api pada badge BIG MATCH, dan skrip auto-scroll berjalan.
+
+```
+marquee → PERTANDINGAN SPESIAL → filter liga → tabel per liga
+```
+
+Pengaturannya sama dengan widget (`BM_LIMIT`, `BM_MODE`, `BM_BIG`) dan bisa diubah di masing-masing file generator.
+
+## 📅 AUTO FETCH DATA (file generator statis)
+
+Berlaku untuk `hokbentoto.html`, `bandar80.html`, `linetogel.html`, `ziatogel.html`.
+
+Sumber utama sekarang **jpbolepalngi** dengan URL yang berganti sendiri tiap hari:
+
+```
+7  Agu 2026  →  .../prediksi-bola-7-8-agustus-2026
+8  Agu 2026  →  .../prediksi-bola-8-9-agustus-2026
+9  Agu 2026  →  .../prediksi-bola-9-10-agustus-2026
+31 Agu 2026  →  .../prediksi-bola-31-agustus-1-september-2026
+31 Des 2026  →  .../prediksi-bola-31-desember-1-januari-2027
+```
+
+Tanggal dihitung pakai jam **WIB**, jadi pergantian hari tepat tengah malam waktu Indonesia.
+
+### Urutan percobaan (fallback)
+
+```
+1. Halaman HARI INI      → ada isinya?  ✓ pakai
+2. Halaman KEMARIN       → ada isinya?  ✓ pakai  (+ catatan di status bar)
+3. URL manual di kotak   → cadangan terakhir
+4. Semua gagal           → INPUT PREDIKSI TIDAK dikosongkan
+```
+
+Halaman dianggap gagal kalau **404, gagal fetch, atau terbit tapi belum ada pertandingan**. Ketiganya sama-sama memicu mundur ke hari sebelumnya, jadi output tidak pernah jadi kosong.
+
+### Toggle di panel AUTO FETCH DATA
+
+| Toggle | ON | OFF |
+|--------|----|-----|
+| 📅 URL OTOMATIS | URL ikut tanggal + fallback | pakai URL yang diketik manual |
+| 🔄 AUTO REFRESH | fetch ulang tiap 60 detik | manual lewat tombol FETCH |
+
+Ganti domain sumber lewat satu baris di tiap file:
+
+```js
+var JPK_BASE = 'https://jpbolepalngi.pagesco.de/prediksi-bola-';
+```
+
+### Format yang terbaca di INPUT PREDIKSI
+
+| Format | Contoh |
+|--------|--------|
+| Waktu → tanggal *(jpbolepalngi)* | `18:00 WIB • 07/08 Liverpool VS Arsenal 2 : 1` |
+| Tanggal → waktu | `07/08 18:00 WIB Liverpool VS Arsenal 2 : 1` |
+| Tanpa WIB / tanpa bullet | `07/08 18:00 Liverpool VS Arsenal 2 : 1` |
+| Tanpa tanggal | `18:00 WIB Liverpool VS Arsenal 2 : 1` |
+| Tanpa skor | `07/08 18:00 WIB Liverpool VS Arsenal` |
+| Skor pakai strip | `07/08 18:00 WIB Liverpool VS Arsenal 2 - 1` |
+| Jam pakai titik | `18.00 WIB • 07/08 Liverpool VS Arsenal 2 : 1` |
+| Ada peringkat / `[W]` | `18:00 WIB • 07/08 [12] Norway [W] VS [11] Slovenia [W] 4 : 0` |
+
+Peringkat `[12]` dan penanda `[W] U17 U20 U21 U23` diabaikan saat mencari logo, tapi tetap tampil di output.
+
+### Link acuan
+
+Header INPUT PREDIKSI sekarang berisi 4 sumber:
+[Bolepalngi](https://jpbolepalngi.pagesco.de/) · [Bolepalngi 2](https://jpbolepalngi2.pagesco.de/) · [Singaslot](https://jpsingaslot.pagesco.de/) · [Koloni4D](https://jpkoloni4d.pagesco.de/)
+
 ## 🔧 Konfigurasi
 
 Semua konfigurasi ada di dalam `{brand}-main.js` (atau `{brand}-auto.html`):
@@ -217,6 +289,7 @@ Berlaku untuk semua `*-embed.html` dan `*-main.js`.
 
 | Tanggal | Perubahan |
 |---------|-----------|
+| 01 Agu 2026 | **4 file generator statis ikut punya Pertandingan Spesial** — CSS `.bm-*`, kartu, dan skrip auto-scroll disalin dari `main.js`, jadi output generator identik dengan widget. Pasaran HDP di generator juga ikut format voor. |
 | 01 Agu 2026 | Badge **BIG MATCH kini 2 kartu teratas** (sebelumnya 1). Diatur lewat `BM_BIG`. |
 | 01 Agu 2026 | Pasaran HDP & kolom Handicap ganti ke **format voor Indonesia** (`0 : 1 1/4`, `2 : 0`) — acak-terkunci per laga, ikut selisih skor prediksi. |
 | 01 Agu 2026 | **Pertandingan Spesial lepas dari halaman sumber** — kartu kini dibangun dari 5 pasaran pertandingan teratas + logo LOGO_DB. Section tidak lagi hilang saat sumber tak punya Big Match. Tambah `BM_LIMIT` & `BM_MODE`. |

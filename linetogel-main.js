@@ -491,7 +491,10 @@ function buatPasaran(m){
   var s1  = parseInt(m.score1)||0, s2 = parseInt(m.score2)||0;
   var ada = (m.score1!=='-' && m.score2!=='-');
   var beda= Math.abs(s1-s2);
-  var seed= _hdpSeed((m.team1||'')+'|'+(m.team2||'')+'|'+(m.date||'')+'|'+(m.time||''));
+  // Zona waktu dibuang dari seed supaya angka pasaran di widget dan di
+  // generator statis selalu sama persis untuk pertandingan yang sama.
+  var jamSeed = String(m.time||'').replace(/\s*(WIB|WITA|WIT)\s*/ig,'').trim();
+  var seed= _hdpSeed((m.team1||'')+'|'+(m.team2||'')+'|'+(m.date||'')+'|'+jamSeed);
 
   /* rentang step pasaran menyesuaikan selisih skor prediksi
      → makin timpang skornya, makin besar voor-nya */

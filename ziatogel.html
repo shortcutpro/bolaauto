@@ -170,6 +170,8 @@ button { flex:1; padding:15px 25px; border:none; border-radius:12px; font-family
 .btn-prediksi-link { display:inline-flex; align-items:center; gap:5px; padding:7px 10px; background:linear-gradient(135deg,var(--primary),var(--primary-dark)); color:#000; border:2px solid var(--primary); border-radius:8px; font-family:'Orbitron',sans-serif; font-weight:700; font-size:10px; text-transform:uppercase; letter-spacing:1px; text-decoration:none; cursor:pointer; transition:all 0.3s; box-shadow:0 0 12px var(--glow-soft); white-space:nowrap; flex-shrink:0; }
 .btn-prediksi-link:hover { box-shadow:0 0 20px var(--primary); transform:translateY(-2px); }
 .btn-prediksi-link:active { transform:translateY(0); }
+.prediksi-links { display:flex; flex-wrap:wrap; gap:6px; justify-content:flex-end; }
+.prediksi-links .btn-prediksi-link { font-size:9px; padding:6px 9px; letter-spacing:.5px; }
 
 /* ── AUTO FETCH PANEL ─────────────────────────────── */
 .fetch-panel{background:linear-gradient(135deg,rgba(26,26,46,0.7),rgba(21,21,32,0.9));border:2px solid rgba(255,215,0,0.5);border-radius:15px;padding:22px 25px 20px;margin-bottom:25px;box-shadow:0 0 25px var(--glow-soft);transition:all 0.5s ease;}
@@ -370,7 +372,7 @@ console.log('[LOGO_DB] Loaded ' + Object.keys(LOGO_DB).length + ' entries (index
                         <span id="newDataBadge" class="new-data-badge">BARU</span>
                     </div>
                     <div class="fetch-url-row">
-                        <input type="text" id="fetchUrl" value="https://shortq.xyz/prediksibola" placeholder="URL sumber prediksi..."/>
+                        <input type="text" id="fetchUrl" value="https://jpbolepalngi.pagesco.de/prediksi-bola-7-8-agustus-2026" placeholder="URL sumber prediksi..."/>
                         <button class="btn-fetch" id="btnFetch">
                             <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg>
                             FETCH
@@ -388,6 +390,16 @@ console.log('[LOGO_DB] Loaded ' + Object.keys(LOGO_DB).length + ' entries (index
                                 <circle id="cdRing" cx="18" cy="18" r="14" fill="none" stroke="var(--primary)" stroke-width="3" stroke-dasharray="87.96" stroke-dashoffset="0" stroke-linecap="round" transform="rotate(-90 18 18)" style="transition:stroke-dashoffset 1s linear;"/>
                             </svg>
                             <div class="fs-ring-num" id="cdNum">60</div>
+                        </div>
+                    </div>
+                    <div class="fetch-toggle-row">
+                        <label>&#x1F4C5; URL OTOMATIS (ikut tanggal)</label>
+                        <div class="toggle-wrap">
+                            <span id="autoUrlLabel">ON</span>
+                            <label class="toggle-sw">
+                                <input type="checkbox" id="autoUrlToggle" checked>
+                                <span class="toggle-sl"></span>
+                            </label>
                         </div>
                     </div>
                     <div class="fetch-toggle-row">
@@ -410,7 +422,12 @@ console.log('[LOGO_DB] Loaded ' + Object.keys(LOGO_DB).length + ' entries (index
             <div class="section">
                 <div class="section-header-row">
                     <h2>📝 INPUT PREDIKSI</h2>
-                    <a href="https://shortq.xyz/prediksibola" target="_blank" rel="noopener noreferrer" class="btn-prediksi-link">⚽ Link Prediksi Bola ⚽</a>
+                    <div class="prediksi-links">
+                        <a href="https://jpbolepalngi.pagesco.de/" target="_blank" rel="noopener noreferrer" class="btn-prediksi-link">⚽ Bolepalngi ⚽</a>
+                        <a href="https://jpbolepalngi2.pagesco.de/" target="_blank" rel="noopener noreferrer" class="btn-prediksi-link">⚽ Bolepalngi 2 ⚽</a>
+                        <a href="https://jpsingaslot.pagesco.de/" target="_blank" rel="noopener noreferrer" class="btn-prediksi-link">⚽ Singaslot ⚽</a>
+                        <a href="https://jpkoloni4d.pagesco.de/" target="_blank" rel="noopener noreferrer" class="btn-prediksi-link">⚽ Koloni4D ⚽</a>
+                    </div>
                 </div>
                 <div class="stats-bar">
                     <div class="stat-item"><div class="stat-label">Total Liga</div><div class="stat-value" id="totalLeagues">0</div></div>
@@ -825,12 +842,23 @@ function parseMatchLine(line) {
     var date='', time='', score1='', score2='';
     var sm = tmp.match(/\b(\d{1,2})\s*[:\-\u2013\u2014]\s*(\d{1,2})\s*$/);
     if (sm) { score1=sm[1]; score2=sm[2]; tmp=tmp.substring(0,sm.index).trim(); }
-    var dtm = tmp.match(/^(\d{1,2}[\/\-]\d{1,2}(?:[\/\-]\d{2,4})?)(?:\s+(\d{1,2}[:.](\d{2}))(?:\s+(WIB|WITA|WIT))?)?/i);
+    // Format A (jpbolepalngi) : "18:00 WIB \u2022 07/08 Home VS Away"
+    //                            "18:00 WIB 07/08 Home VS Away"
+    var tdm = tmp.match(/^(\d{1,2}[:.]\d{2})\s*(WIB|WITA|WIT)?\s*[\u2022\u00b7\u25cf\-\u2013\u2014|,]?\s*(\d{1,2}[\/\-]\d{1,2}(?:[\/\-]\d{2,4})?)(?=\s)/i);
+    if (tdm) {
+        time = tdm[1].replace('.',':');
+        if (tdm[2]) time += ' ' + tdm[2].toUpperCase();
+        date = tdm[3].replace(/-/g,'/');
+        tmp = tmp.substring(tdm[0].length).trim();
+    } else {
+    // Format B : "07/08 18:00 WIB Home VS Away"
+    var dtm = tmp.match(/^(\d{1,2}[\/\-]\d{1,2}(?:[\/\-]\d{2,4})?)(?:\s*[\u2022\u00b7\u25cf|,]?\s*(\d{1,2}[:.](\d{2}))(?:\s+(WIB|WITA|WIT))?)?/i);
     if (dtm) {
         date = dtm[1].replace('-','/');
         if (dtm[2]) { time = dtm[2].replace('.',':'); if (dtm[4]) time += ' ' + dtm[4].toUpperCase(); }
         tmp = tmp.substring(dtm[0].length).trim();
     } else {
+        // Format C : "18:00 WIB Home VS Away" (tanpa tanggal)
         var tm = tmp.match(/^(\d{1,2}[:.](\d{2}))(?:\s+(WIB|WITA|WIT))?/i);
         if (tm) {
             time = tm[1].replace('.',':');
@@ -838,6 +866,9 @@ function parseMatchLine(line) {
             tmp = tmp.substring(tm[0].length).trim();
         }
     }
+    }
+    // Buang sisa pemisah di depan nama tim (bullet, strip, pipa)
+    tmp = tmp.replace(/^[\u2022\u00b7\u25cf\-\u2013\u2014|,:]+\s*/,'').trim();
     var vm = tmp.match(/^(.+?)\s+v\.?s\.?\s+(.+)$/i);
     if (!vm) return null;
     var team1 = vm[1].trim().replace(/^\[\d+\]\s*/,'').replace(/\[\s*[nN]\s*\]/g,'').replace(/\s+/g,' ').trim();
@@ -1129,19 +1160,12 @@ function autoPred(m) {
     var diff  = Math.abs(s1 - s2);
     var homeWin = s1 > s2, awayWin = s2 > s1;
 
-    var hcp, hcpClass, hcpNote;
-    if (!hasScore) {
-        // Belum ada skor → prediksi awal: home unggul tipis
-        hcp = m.team1+' -0.5'; hcpClass = 'green'; hcpNote = 'Prediksi Awal';
-    } else if (s1 === s2) {
-        hcp = 'Draw / AH 0'; hcpClass = ''; hcpNote = 'Imbang ketat';
-    } else if (homeWin) {
-        hcp = diff >= 2 ? m.team1+' -'+(diff-1)+'.5' : m.team1+' -0.5';
-        hcpClass = 'green'; hcpNote = 'Home unggul';
-    } else {
-        hcp = diff >= 2 ? m.team2+' -'+(diff-1)+'.5' : m.team2+' -0.5';
-        hcpClass = 'green'; hcpNote = 'Away unggul';
-    }
+    // Pasaran HDP format voor Indonesia — lihat buatPasaran()
+    var hcp      = buatPasaran(m);
+    var hcpClass = (hasScore && s1 === s2) ? '' : 'green';
+    var hcpNote  = !hasScore ? 'Pasaran Awal'
+                 : (s1 === s2 ? 'Voor Tipis'
+                 : (homeWin ? 'Home Kasih Voor' : 'Away Kasih Voor'));
 
     // === O/U: Line dari skor, tapi Over/Under random ===
     var ouLine = total <= 2 ? '2.5' : (total <= 4 ? '3.5' : '4.5');
@@ -1162,6 +1186,136 @@ function autoPred(m) {
             ou:ouPick, ouClass:ouClass, ouNote:ouNote,
             ox2:ox2, ox2Class:ox2Class, ox2Note:ox2Note,
             acc:m.score1+' - '+m.score2};
+}
+
+
+// ── PASARAN HDP — format voor Indonesia ────────────────────────────────
+// Contoh: "0 : 1 1/4"  "2 : 0"  "0 : 3/4".  Sisi favorit selalu 0.
+// Nilai acak tapi TERKUNCI per pertandingan (seed nama tim + tanggal + jam).
+var HDP_TANGGA = ['0','1/4','1/2','3/4','1','1 1/4','1 1/2','1 3/4',
+                  '2','2 1/4','2 1/2','2 3/4','3','3 1/4','3 1/2','3 3/4','4'];
+
+function _hdpSeed(str) {
+    var h = 2166136261, i;
+    for (i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = (h*16777619)>>>0; }
+    return h>>>0;
+}
+
+function buatPasaran(m) {
+    var s1  = parseInt(m.score1)||0, s2 = parseInt(m.score2)||0;
+    var ada = (m.score1 !== '-' && m.score2 !== '-');
+    var beda= Math.abs(s1-s2);
+    // Zona waktu dibuang dari seed supaya angka pasaran di generator statis
+    // dan di widget (main.js) selalu sama persis untuk pertandingan yang sama.
+    var jamSeed = String(m.time||'').replace(/\s*(WIB|WITA|WIT)\s*/ig,'').trim();
+    var seed= _hdpSeed((m.team1||'')+'|'+(m.team2||'')+'|'+(m.date||'')+'|'+jamSeed);
+    var lo, hi;
+    if (!ada)         { lo=0; hi=3;  }
+    else if (beda===0){ lo=0; hi=2;  }
+    else if (beda===1){ lo=1; hi=4;  }
+    else if (beda===2){ lo=3; hi=7;  }
+    else if (beda===3){ lo=6; hi=10; }
+    else              { lo=9; hi=13; }
+    var nilai = HDP_TANGGA[lo + (seed % (hi-lo+1))];
+    if (ada && s2>s1) return nilai+' : 0';
+    if (ada && s1>s2) return '0 : '+nilai;
+    return (seed & 1) ? nilai+' : 0' : '0 : '+nilai;
+}
+
+// ── BIG MATCH / "PERTANDINGAN SPESIAL" ──────────────────────────────
+// Kartu dibangun sendiri dari pertandingan teratas di daftar prediksi,
+// jadi tetap tampil walau halaman sumber tidak punya section spesial.
+//   BM_LIMIT : jumlah kartu                                   (default 5)
+//   BM_MODE  : 'urut' → pertandingan paling atas apa adanya
+//              'liga' → 1 pertandingan teratas dari tiap liga
+//   BM_BIG   : berapa kartu teratas yang dapat badge BIG MATCH (default 2)
+var BM_LIMIT = 5;
+var BM_MODE  = 'urut';
+var BM_BIG   = 2;
+
+function _bmTahunWIB(ddmm) {
+    var now = new Date(Date.now() + 7*3600*1000);
+    var thn = now.getUTCFullYear();
+    var bln = now.getUTCMonth() + 1;
+    var mm  = /^\d{1,2}\/(\d{1,2})/.exec(ddmm||'');
+    if (mm) {
+        var b = parseInt(mm[1],10);
+        if (bln===12 && b===1)  thn += 1;
+        if (bln===1  && b===12) thn -= 1;
+    }
+    return thn;
+}
+function _bmTanggal(ddmm) {
+    if (!ddmm || ddmm === '-') return '';
+    if (/\d{4}$/.test(ddmm)) return ddmm;
+    return ddmm + '/' + _bmTahunWIB(ddmm);
+}
+
+function pickBigMatches(leagues) {
+    var out=[], sudah={}, i, j, lg, key;
+    if (!leagues || !leagues.length) return out;
+    if (BM_MODE === 'liga') {
+        for (i=0; i<leagues.length && out.length<BM_LIMIT; i++) {
+            lg = leagues[i];
+            if (lg && lg.matches && lg.matches.length) {
+                out.push({liga:lg.name, m:lg.matches[0]});
+                sudah[lg.name+'|'+lg.matches[0].team1+'|'+lg.matches[0].team2] = 1;
+            }
+        }
+    }
+    for (i=0; i<leagues.length && out.length<BM_LIMIT; i++) {
+        lg = leagues[i];
+        if (!lg || !lg.matches) continue;
+        for (j=0; j<lg.matches.length && out.length<BM_LIMIT; j++) {
+            key = lg.name+'|'+lg.matches[j].team1+'|'+lg.matches[j].team2;
+            if (sudah[key]) continue;
+            sudah[key] = 1;
+            out.push({liga:lg.name, m:lg.matches[j]});
+        }
+    }
+    return out;
+}
+
+function buildBigMatchHTML(leagues) {
+    var items = pickBigMatches(leagues);
+    if (!items.length) return '';
+    var cards = '';
+    items.forEach(function(it, idx) {
+        var m  = it.m;
+        var p  = autoPred(m);
+        var lh = getLogoUrl(m.team1Clean);
+        var la = getLogoUrl(m.team2Clean);
+        var hdp  = p.hcp || '';
+        var pred = (m.score1!=='-' && m.score2!=='-') ? (m.score1+' : '+m.score2) : (p.ou||'');
+        var tgl  = _bmTanggal(m.date);
+        var jam  = (m.time && m.time!=='-') ? m.time : '';
+        // parseMatchLine di generator ini menyimpan zona waktu di dalam m.time
+        // ("17:00 WIB"), jadi jangan ditambah lagi supaya tidak jadi "WIB WIB".
+        if (jam && !/\b(WIB|WITA|WIT)\b/i.test(jam)) jam += ' WIB';
+        var valLine = '';
+        if (hdp)  valLine += '<span class="bm-val"><i>Pasaran HDP</i><b>'+hdp+'</b></span>';
+        if (pred) valLine += '<span class="bm-val"><i>Prediksi</i><b>'+pred+'</b></span>';
+        var isBig= (idx < BM_BIG);
+        var lbl  = isBig ? 'BIG MATCH' : 'MATCH DAY';
+        var fire = isBig ? '<span class="bm-fire">&#128293;</span>' : '';
+        cards += '<article class="bm-card"><span class="bm-shine"></span>'
+            +  '<div class="bm-badgewrap"><span class="bm-badge">'+fire+lbl+'</span></div>'
+            +  '<div class="bm-league">'+(it.liga||'')+'</div>'
+            +  '<div class="bm-teams">'
+            +    '<div class="bm-team"><span class="bm-logo"><img src="'+lh+'" alt="'+m.team1+'" loading="lazy"/></span><b>'+m.team1+'</b></div>'
+            +    '<em>VS</em>'
+            +    '<div class="bm-team"><span class="bm-logo"><img src="'+la+'" alt="'+m.team2+'" loading="lazy"/></span><b>'+m.team2+'</b></div>'
+            +  '</div>'
+            +  '<div class="bm-meta">'+tgl+(jam?(tgl?' &bull; ':'')+jam:'')+'</div>'
+            +  (valLine?'<div class="bm-values">'+valLine+'</div>':'')
+            +'</article>';
+    });
+    return '<div class="bm-section">'
+        + '<div class="bm-head">'
+        +   '<span class="bm-kicker">&#10022; Pertandingan Spesial</span>'
+        + '</div>'
+        + '<div class="bm-runner" data-bm-runner><div class="bm-track">'+cards+cards+'</div></div>'
+        + '</div>';
 }
 
 // ── BUILD OUTPUT HTML ─────────────────────────────────────
@@ -1262,7 +1416,34 @@ function buildOutputHTML(leagues) {
         '    var visible=b.querySelectorAll(".match-card:not(.hidden)").length;',
         '    b.style.display=visible?"":"none";',
         '  });',
-        '}'
+        '}',
+        '/* ===== Big Match: auto-scroll berjalan + tombol geser ===== */',
+        '(function(){',
+        '  var runner=document.querySelector("[data-bm-runner]");',
+        '  if(!runner) return;',
+        '  var paused=false;',
+        '  runner.addEventListener("mouseenter",function(){paused=true;});',
+        '  runner.addEventListener("mouseleave",function(){paused=false;});',
+        '  runner.addEventListener("touchstart",function(){paused=true;},{passive:true});',
+        '  runner.addEventListener("touchend",function(){setTimeout(function(){paused=false;},2500);},{passive:true});',
+        '  // Auto-scroll pakai requestAnimationFrame (mulus, hemat, sinkron layar)',
+        '  var visible=true, last=0, SPEED=32; /* px per detik */',
+        '  if("IntersectionObserver" in window){',
+        '    new IntersectionObserver(function(en){ visible=en[0].isIntersecting; })',
+        '      .observe(runner.closest(".bm-section")||runner);',
+        '  }',
+        '  function tick(ts){',
+        '    if(!last) last=ts;',
+        '    var dt=(ts-last)/1000; last=ts;',
+        '    if(!paused && visible && dt<0.25){',
+        '      var half=runner.scrollWidth/2;',
+        '      if(half>0 && runner.scrollLeft>=half){ runner.scrollLeft-=half; }',
+        '      runner.scrollLeft+=SPEED*dt;',
+        '    }',
+        '    requestAnimationFrame(tick);',
+        '  }',
+        '  requestAnimationFrame(tick);',
+        '})();',
     ].join('\n');
 
     return '<!-- Generated by '+cfg.name+' Generator -->\n'
@@ -1345,6 +1526,48 @@ function buildOutputHTML(leagues) {
 +'.marquee-wrap{overflow:hidden;white-space:nowrap;width:90%;margin:0 auto 16px;border:3px solid var(--g);border-radius:15px;background:linear-gradient(135deg,#1a1a1a,#000,#1a1a1a);padding:15px 0;box-shadow:0 0 20px var(--gd);}\n'
 +'.marquee-inner{display:inline-block;animation:marquee 38s linear infinite;padding-left:100%;font-size:clamp(11px,2.8vw,14px);font-weight:900;color:var(--g);text-shadow:0 0 10px var(--gd);letter-spacing:1.5px;}\n'
 +'@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-100%)}}\n'
++'.bm-section{width:90%;margin:0 auto 18px;}\n'
++'.bm-head{margin-bottom:14px;text-align:center;}\n'
++'.bm-kicker{display:inline-flex;align-items:center;gap:8px;font-family:\'Cinzel\',serif;font-size:clamp(12px,3vw,16px);font-weight:900;color:var(--g);text-shadow:0 0 12px var(--gd);letter-spacing:1.5px;padding:6px 16px;border:2px solid var(--g);border-radius:12px;background:linear-gradient(135deg,#1a1a1a,#000);}\n'
++'.bm-runner{overflow-x:auto;overflow-y:hidden;padding:8px 0 16px;-webkit-overflow-scrolling:touch;scrollbar-width:none;transform:translateZ(0);}\n'
++'.bm-runner::-webkit-scrollbar{display:none;}\n'
++'.bm-track{display:flex;gap:18px;width:max-content;will-change:transform;transform:translateZ(0);}\n'
++'@media (max-width:480px){.bm-shine{animation-duration:5s;}.bm-card{box-shadow:0 10px 20px -8px rgba(0,0,0,.7),0 0 16px var(--gd),inset 0 2px 1px rgba(255,255,255,.15);}}\n'
++'@media (prefers-reduced-motion:reduce){.bm-shine,.bm-fire,.bm-badge{animation:none!important;}}\n'
++'.bm-card{position:relative;flex:0 0 auto;width:300px;border:3px solid var(--g);border-radius:15px;padding:14px 14px 12px;'
++  'background:linear-gradient(155deg,#4a4a4a 0%,#343434 45%,#242424 100%);'
++  'transform:translateY(0);'
++  'box-shadow:0 18px 30px -10px rgba(0,0,0,.75),0 6px 12px rgba(0,0,0,.5),0 0 22px var(--gd),inset 0 2px 1px rgba(255,255,255,.18),inset 0 -10px 22px rgba(0,0,0,.55);'
++  'transition:transform .3s ease,box-shadow .3s ease;overflow:hidden;will-change:transform;transform:translateZ(0);backface-visibility:hidden;}\n'
++'.bm-card::after{content:\'\';position:absolute;inset:0;border-radius:12px;pointer-events:none;background:linear-gradient(160deg,rgba(255,255,255,.12),transparent 40%);z-index:2;}\n'
++'.bm-card:hover{transform:translateY(-6px);box-shadow:0 30px 44px -10px rgba(0,0,0,.82),0 12px 20px rgba(0,0,0,.55),0 0 30px var(--g),inset 0 2px 1px rgba(255,255,255,.22),inset 0 -12px 24px rgba(0,0,0,.55);}\n'
++'.bm-shine{position:absolute;top:0;left:0;width:60%;height:100%;pointer-events:none;background:linear-gradient(115deg,transparent 0%,rgba(255,255,255,.03) 30%,rgba(255,255,255,.32) 50%,rgba(255,255,255,.03) 70%,transparent 100%);transform:translateX(-260%) skewX(-18deg);will-change:transform;animation:bmShine 3.6s ease-in-out infinite;z-index:3;}\n'
++'@keyframes bmShine{0%{transform:translateX(-260%) skewX(-18deg)}55%{transform:translateX(260%) skewX(-18deg)}100%{transform:translateX(260%) skewX(-18deg)}}\n'
++'.bm-badgewrap{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:6px;}\n'
++'.bm-badgewrap::before,.bm-badgewrap::after{content:\'\';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--g),transparent);opacity:.5;}\n'
++'.bm-badge{display:inline-flex;align-items:center;gap:6px;font-family:\'Cinzel\',serif;font-size:10px;font-weight:900;letter-spacing:2px;color:#000;background:linear-gradient(180deg,var(--gl),var(--g));padding:4px 14px;border-radius:20px;white-space:nowrap;will-change:filter;animation:bmBadgeGlow 2.4s ease-in-out infinite;}\n'
++'@keyframes bmBadgeGlow{0%,100%{filter:drop-shadow(0 0 4px var(--gd));}50%{filter:drop-shadow(0 0 9px var(--g));}}\n'
++'.bm-fire{display:inline-block;font-size:11px;line-height:1;filter:drop-shadow(0 0 3px rgba(255,120,0,.9));animation:bmFire 1.4s ease-in-out infinite;transform-origin:50% 90%;will-change:transform;}\n'
++'@keyframes bmFire{0%,100%{transform:scale(1) rotate(-4deg);opacity:1;}50%{transform:scale(1.18) rotate(4deg);opacity:.85;}}\n'
++'.bm-league{text-align:center;font-size:9.5px;font-weight:800;letter-spacing:1.5px;color:var(--g);text-transform:uppercase;margin-bottom:12px;line-height:1.3;text-shadow:0 0 8px var(--gd);}\n'
++'.bm-teams{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;margin-bottom:10px;}\n'
++'.bm-team{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;}\n'
++'.bm-logo{width:56px;height:56px;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle,#333,#111);border:2px solid var(--g);border-radius:50%;overflow:hidden;box-shadow:0 0 12px var(--gd),inset 0 0 8px rgba(0,0,0,.6);transition:transform .4s ease,box-shadow .4s ease;}\n'
++'.bm-logo img{width:76%;height:76%;object-fit:contain;transition:transform .4s ease,filter .4s ease;}\n'+'.bm-card:hover .bm-logo{transform:scale(1.12) translateY(-3px);box-shadow:0 0 18px var(--g),0 0 30px var(--gl),inset 0 0 8px rgba(0,0,0,.6);}\n'+'.bm-card:hover .bm-logo img{transform:scale(1.1);filter:drop-shadow(0 0 10px var(--gl)) brightness(1.15);}\n'
++'@media (hover:none){\n'
++'  .bm-card:hover{transform:translateZ(0);box-shadow:0 18px 30px -10px rgba(0,0,0,.75),0 6px 12px rgba(0,0,0,.5),0 0 22px var(--gd),inset 0 2px 1px rgba(255,255,255,.18),inset 0 -10px 22px rgba(0,0,0,.55);}\n'
++'  .bm-card:hover .bm-logo{transform:translateZ(0);box-shadow:0 0 12px var(--gd),inset 0 0 8px rgba(0,0,0,.6);}\n'
++'  .bm-card:hover .bm-logo img{transform:none;filter:none;}\n'
++'}\n'
++'@media (prefers-reduced-motion:reduce){.bm-shine,.bm-fire,.bm-badge{animation:none!important;}}\n'
++'.bm-team b{font-size:12px;font-weight:800;color:#fff;line-height:1.2;}\n'
++'.bm-teams em{font-style:normal;font-weight:900;font-size:12px;color:var(--g);opacity:.7;letter-spacing:1px;}\n'
++'.bm-meta{text-align:center;font-size:10.5px;font-weight:700;color:var(--g);opacity:.9;letter-spacing:.5px;margin-bottom:12px;}\n'
++'.bm-values{position:relative;display:flex;border-top:1px solid var(--gs);padding-top:12px;}\n'
++'.bm-val{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;}\n'
++'.bm-values .bm-val + .bm-val{border-left:1px solid var(--gs);}\n'
++'.bm-val i{font-style:normal;font-size:9px;font-weight:700;color:var(--g);opacity:.7;letter-spacing:1.5px;text-transform:uppercase;}\n'
++'.bm-val b{font-size:18px;font-weight:900;color:var(--g);text-shadow:0 0 10px var(--gd);}\n'
 
 // ── FILTER ──
 +'.filter-wrap{width:90%;margin:0 auto 14px;display:grid;grid-template-columns:1fr 1fr;gap:10px;}\n'
@@ -1445,6 +1668,9 @@ function buildOutputHTML(leagues) {
 // ── MARQUEE ──
 +'<div class="marquee-wrap"><div class="marquee-inner">'+cfg.marquee+'&nbsp;&nbsp;&nbsp;&nbsp;'+cfg.marquee+'</div></div>\n\n'
 
+// ── BIG MATCH — Pertandingan Spesial ──
++buildBigMatchHTML(leagues)+'\n\n'
+
 // ── FILTER ──
 +'<div class="filter-wrap">\n'
 +'  <div>\n'
@@ -1496,11 +1722,86 @@ var FETCH_PROXIES = [
     { name:'corsproxy.org',build:function(u){return 'https://corsproxy.org/?'+encodeURIComponent(u);},                                extract:async function(r){return r.text();}}
 ];
 
-async function fetchWithFallback(url) {
+// ── SUMBER JPBOLEPALNGI — URL OTOMATIS IKUT TANGGAL (WIB) ───────────────────
+// Format : prediksi-bola-{tgl1}-{tgl2}-{bulan}-{tahun}
+// Contoh : prediksi-bola-7-8-agustus-2026
+// Besok otomatis jadi prediksi-bola-8-9-agustus-2026, dst.
+// Kalau halaman terbaru belum terbit → mundur ke halaman hari sebelumnya.
+var JPK_AUTO_URL = true;
+var JPK_BASE  = 'https://jpbolepalngi.pagesco.de/prediksi-bola-';
+var JPK_BULAN = ['januari','februari','maret','april','mei','juni',
+                 'juli','agustus','september','oktober','november','desember'];
+
+function jpkTanggalWIB(offsetHari) {
+    var now = new Date(Date.now() + 7*3600*1000);
+    return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + (offsetHari||0)));
+}
+
+// Semua kemungkinan penulisan URL untuk 1 pasang tanggal (aman saat lintas bulan/tahun)
+function jpkKandidat(d1) {
+    var d2 = new Date(Date.UTC(d1.getUTCFullYear(), d1.getUTCMonth(), d1.getUTCDate()+1));
+    var t1 = d1.getUTCDate(), t2 = d2.getUTCDate();
+    var b1 = JPK_BULAN[d1.getUTCMonth()], b2 = JPK_BULAN[d2.getUTCMonth()];
+    var y1 = d1.getUTCFullYear(),  y2 = d2.getUTCFullYear();
+    if (b1 === b2) return [JPK_BASE + t1 + '-' + t2 + '-' + b1 + '-' + y1];
+    var v = [JPK_BASE + t1 + '-' + b1 + '-' + t2 + '-' + b2 + '-' + y2,
+             JPK_BASE + t1 + '-' + t2 + '-' + b1 + '-' + y1,
+             JPK_BASE + t1 + '-' + t2 + '-' + b2 + '-' + y2];
+    if (y1 !== y2) v.push(JPK_BASE + t1 + '-' + b1 + '-' + y1 + '-' + t2 + '-' + b2 + '-' + y2);
+    return v;
+}
+
+// Urutan coba: HARI INI dulu → kalau gagal/kosong baru KEMARIN
+function jpkDaftarUrl() {
+    return jpkKandidat(jpkTanggalWIB(0)).concat(jpkKandidat(jpkTanggalWIB(-1)));
+}
+function jpkUrlHariIni() { return jpkKandidat(jpkTanggalWIB(0))[0]; }
+
+// Label pendek untuk status bar, misal "7-8-agustus-2026"
+function jpkLabel(url) {
+    var m = /prediksi-bola-(.+?)\/?$/i.exec(url || '');
+    return m ? m[1] : (url || '');
+}
+
+function jpkFlat(s) {
+    return s.replace(/<script[\s\S]*?<\/script>/gi, ' ')
+            .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+            .replace(/<[^>]+>/g, ' ')
+            .replace(/&amp;/g, '&').replace(/&nbsp;|&#160;/g, ' ')
+            .replace(/&bull;|&#8226;/g, '\u2022')
+            .replace(/\s+/g, ' ').trim();
+}
+
+// Ubah halaman jpbolepalngi → baris siap pakai:
+//   "NAMA LIGA"
+//   "07/08 18:00 WIB Home VS Away 1 : 0"
+function parseJpkoloni(html) {
+    if (!html) return [];
+    var out = [];
+    var MRE = /(\d{1,2}:\d{2})\s*WIB\s*\u2022?\s*(\d{2}\/\d{2})\s+(.+?)\s+VS\s+(.+?)\s+(\d+)\s*[:\-]\s*(\d+)(?=\s|$)/g;
+    var parts = html.split(/<h[23][^>]*>/gi);
+    for (var p = 1; p < parts.length; p++) {
+        var seg = parts[p];
+        var cut = seg.search(/<\/h[23]>/i);
+        if (cut < 0) continue;
+        var liga = jpkFlat(seg.slice(0, cut));
+        var body = jpkFlat(seg.slice(cut));
+        if (!liga || liga.length > 60 || /rincian|prediksi bola \d/i.test(liga)) continue;
+        var rows = [], m; MRE.lastIndex = 0;
+        while ((m = MRE.exec(body)) !== null) {
+            rows.push(m[2] + ' ' + m[1] + ' WIB ' + m[3].trim() + ' VS ' + m[4].trim() + ' ' + m[5] + ' : ' + m[6]);
+        }
+        if (rows.length) { out.push(liga.toUpperCase()); out.push.apply(out, rows); }
+    }
+    return out;
+}
+
+async function fetchWithFallback(url, label) {
+    var tag = label ? (label + ' — ') : '';
     for (var i = 0; i < FETCH_PROXIES.length; i++) {
         var p = FETCH_PROXIES[i];
         try {
-            setFsStatus('loading', '[' + (i+1) + '/' + FETCH_PROXIES.length + '] Mencoba ' + p.name + '...');
+            setFsStatus('loading', tag + '[' + (i+1) + '/' + FETCH_PROXIES.length + '] Mencoba ' + p.name + '...');
             var ctrl = new AbortController();
             var tout = setTimeout(function(){ ctrl.abort(); }, 8000);
             var resp = await fetch(p.build(url), { signal: ctrl.signal, cache: 'no-store' });
@@ -1722,19 +2023,65 @@ function setFsStatus(state, text) {
     if (st) st.textContent = text;
 }
 
+// Ambil satu URL lalu parse: coba parser jpbolepalngi dulu, baru parser umum
+async function ambilDanParse(url, label) {
+    var raw = await fetchWithFallback(url, label);
+    var lines = parseJpkoloni(raw);
+    if (!lines.length) lines = parseRawHtml(raw);
+    var jml = 0;
+    lines.forEach(function(l){ if (MATCH_RE_FETCH.test(preNorm(l))) jml++; });
+    return { lines: lines, jml: jml };
+}
+
 async function doFetch() {
-    var urlEl = document.getElementById('fetchUrl');
-    var url = urlEl ? urlEl.value.trim() : 'https://shortq.xyz/prediksibola';
-    if (!url) return;
+    var urlEl  = document.getElementById('fetchUrl');
+    var manual = urlEl ? urlEl.value.trim() : '';
+
+    // Susun daftar URL yang akan dicoba
+    var kandidat;
+    if (JPK_AUTO_URL) {
+        kandidat = jpkDaftarUrl();                       // hari ini → kemarin
+        if (manual && !/prediksi-bola-/i.test(manual) && kandidat.indexOf(manual) < 0) {
+            kandidat.push(manual);                       // sumber lain sebagai cadangan terakhir
+        }
+    } else {
+        kandidat = manual ? [manual] : jpkDaftarUrl();
+    }
+    if (!kandidat.length) return;
 
     var btn = document.getElementById('btnFetch');
     if (btn) { btn.disabled = true; btn.textContent = '...'; }
     var badge = document.getElementById('newDataBadge');
     if (badge) badge.classList.remove('show');
 
+    var hasil = null, urlDipakai = '', mundur = false, errTerakhir = '';
+
+    for (var k = 0; k < kandidat.length && !hasil; k++) {
+        var u = kandidat[k];
+        try {
+            console.log('[SUMBER] Coba: ' + u);
+            var r = await ambilDanParse(u, jpkLabel(u));
+            if (r.jml > 0) {
+                hasil = r; urlDipakai = u;
+                // Bukan kandidat tanggal hari ini → berarti mundur ke hari sebelumnya
+                mundur = JPK_AUTO_URL && jpkKandidat(jpkTanggalWIB(0)).indexOf(u) < 0;
+                console.log('[SUMBER] OK (' + r.jml + ' pertandingan): ' + u);
+            } else {
+                console.warn('[SUMBER] Kosong / belum ada data: ' + u);
+                errTerakhir = 'halaman kosong';
+            }
+        } catch (e) {
+            console.warn('[SUMBER] Gagal: ' + u + ' — ' + e.message);
+            errTerakhir = e.message;
+        }
+    }
+
     try {
-        var raw = await fetchWithFallback(url);
-        var lines = parseRawHtml(raw);
+        if (!hasil) throw new Error(errTerakhir || 'semua sumber gagal');
+
+        if (urlEl && urlDipakai) urlEl.value = urlDipakai;   // tampilkan URL yang benar-benar dipakai
+
+        var lines = hasil.lines;
         var combined = lines.join('\n');
         var newHash = simpleHash(combined);
 
@@ -1752,17 +2099,23 @@ async function doFetch() {
             el = document.getElementById('fsMatches'); if (el) el.textContent = stats.mt || '-';
             el = document.getElementById('fsCache');
             if (el) { var n=new Date(); el.textContent=n.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'}); }
-            setFsStatus('ok', stats.mt + ' pertandingan, ' + stats.lg + ' liga dimuat');
-            showNotification(stats.mt + ' pertandingan berhasil dimuat!');
+            setFsStatus('ok', stats.mt + ' pertandingan, ' + stats.lg + ' liga dimuat'
+                + (mundur ? ' — pakai data ' + jpkLabel(urlDipakai) + ' (halaman terbaru belum ada)' : ''));
+            showNotification(stats.mt + ' pertandingan berhasil dimuat!'
+                + (mundur ? ' (data ' + jpkLabel(urlDipakai) + ')' : ''));
             handleInput();
         } else {
-            setFsStatus('ok', 'Data sama - tidak ada perubahan');
+            setFsStatus('ok', 'Data sama - tidak ada perubahan'
+                + (mundur ? ' — masih pakai ' + jpkLabel(urlDipakai) : ''));
         }
         var now = new Date();
         var lu = document.getElementById('fsLastUpdated');
         if (lu) lu.textContent = 'Diperbarui: ' + now.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
     } catch(err) {
-        setFsStatus('error', 'Gagal: ' + err.message);
+        // PENTING: data lama di INPUT PREDIKSI sengaja TIDAK dihapus,
+        // supaya output tidak jadi kosong saat halaman terbaru belum terbit.
+        var adaLama = (document.getElementById('inputText') || {}).value;
+        setFsStatus('error', 'Gagal: ' + err.message + (adaLama ? ' — data sebelumnya dipertahankan' : ''));
         showNotification('Fetch gagal: ' + err.message);
     }
 
@@ -1789,6 +2142,16 @@ function startCountdown() {
         if (cdSec <= 0) { cdSec = REFRESH_SECS; if (autoRefOn) doFetch(); }
     }, 1000);
 }
+function toggleAutoUrl() {
+    var cb = document.getElementById('autoUrlToggle');
+    JPK_AUTO_URL = cb ? cb.checked : true;
+    var lbl = document.getElementById('autoUrlLabel');
+    if (lbl) lbl.textContent = JPK_AUTO_URL ? 'ON' : 'OFF';
+    var fu = document.getElementById('fetchUrl');
+    if (fu && JPK_AUTO_URL) fu.value = jpkUrlHariIni();
+    showNotification(JPK_AUTO_URL ? 'URL Otomatis: ON (ikut tanggal)' : 'URL Otomatis: OFF (manual)');
+}
+
 function toggleAutoRef() {
     autoRefOn = document.getElementById('autoRefToggle').checked;
     var lbl = document.getElementById('autoRefLabel');
@@ -2105,8 +2468,15 @@ window.addEventListener('DOMContentLoaded', function(){
 
     // single site — no switcher needed });
 
+    // URL sumber otomatis mengikuti tanggal hari ini (WIB)
+    (function(){
+        var fu = document.getElementById('fetchUrl');
+        if (fu && JPK_AUTO_URL) fu.value = jpkUrlHariIni();
+    })();
+
     _b('btnFetch',        'click', doFetch);
     _b('autoRefToggle',   'change', toggleAutoRef);
+    _b('autoUrlToggle',   'change', toggleAutoUrl);
     _b('btnClear',        'click', clearInput);
     _b('btnCopy',         'click', copyToClipboard);
 
