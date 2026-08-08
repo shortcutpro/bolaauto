@@ -1111,3 +1111,35 @@ if(document.readyState==='loading'){
 }
 
 })();
+
+document.addEventListener('keydown', function(e) {
+    if (e.ctrlKey && e.shiftKey &&
+        (e.key.toUpperCase() === 'I' ||
+         e.key.toUpperCase() === 'J' ||
+         e.key.toUpperCase() === 'C')) {
+        e.preventDefault();
+        return false;
+    }
+
+    if (e.ctrlKey && e.key.toLowerCase() === 'u') {
+        e.preventDefault();
+        return false;
+    }
+
+    if (e.key === 'F12') {
+        e.preventDefault();
+        return false;
+    }
+});
+
+document.addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+});
+
+document.addEventListener('dragstart', function(e) {
+    e.preventDefault();
+});
+
+document.addEventListener('selectstart', function(e) {
+    e.preventDefault();
+});
