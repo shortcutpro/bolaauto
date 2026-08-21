@@ -6,7 +6,7 @@
 ═══════════════════════════════════════════════ */
 var SOURCE_URL    = 'https://shortq.xyz/prediksibola'; // sumber data prediksi
 var SITE_NAME     = 'ZIA TOGEL';
-var SITE_LOGO     = 'https://ziatogel90.com/assets/img/auo/logo.png';
+var SITE_LOGO     = 'https://cdn.areabermain.club/assets/cdn/az5/2026/08/21/20260821/286d099a9197beaa75097b5118881f76/zia.png';
 var MBAPPE_GIF    = 'https://photoku.io/images/2026/05/31/giffmbappee-finall.gif';
 var MARQUEE_TEXT  = '👑 PREDIKSI BOLA TERUPDATE ! Tunggu apa lagi? Daftar di ZIA TOGEL dan nikmati pengalaman taruhan terbaik! 👑';
 var COLOR_MAIN    = '#FFC800';
@@ -220,7 +220,7 @@ function showLoading(msg, pct){
   var hasBar = pctVal >= 0;
   root.innerHTML =
     '<div class="ibc-loading-wrap">'+
-    '<img src="https://ziatogel90.com/assets/img/auo/logo.png" alt="ZIA TOGEL" style="width:110px;max-height:72px;object-fit:contain;filter:drop-shadow(0 0 16px #FFC800);margin-bottom:8px;"/>'+
+    '<img src="https://cdn.areabermain.club/assets/cdn/az5/2026/08/21/20260821/286d099a9197beaa75097b5118881f76/zia.png" alt="ZIA TOGEL" style="width:110px;max-height:72px;object-fit:contain;filter:drop-shadow(0 0 16px #FFC800);margin-bottom:8px;"/>'+
     '<div class="ibc-spinner"></div>'+
     '<div class="ibc-loading-text">⚽ '+(msg||'Memuat Prediksi ZIA TOGEL…')+'</div>'+
     (hasBar?
