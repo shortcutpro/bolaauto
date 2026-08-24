@@ -1,3 +1,5 @@
+/* BUILD_VERSION: date-fix-2026-08-24 — header tanggal patok ke HARI INI (WIB) */
+console.log("[bolaauto] date-fix-2026-08-24 aktif");
 (function(){
 
 
@@ -719,14 +721,31 @@ function buildDateRange(leagues){
   var wrapYear=adaDes&&adaJan;
   function toDate(o){ return new Date(o.m===0&&wrapYear?yr+1:yr, o.m, o.d); }
   days.sort(function(a,b){ return toDate(a)-toDate(b); });
-  var first=days[0];
+
+  // 'first' = HARI INI (WIB), bukan tanggal terkecil di data.
+  // Alasan: data prediksi kadang masih menyisakan laga tanggal kemarin
+  // (mis. laga dini hari). Kalau pakai days[0], header ikut mundur ke kemarin
+  // walaupun isi prediksi sudah update. Jadi patok ke hari ini.
+  var _now=new Date(Date.now()+7*3600*1000); // WIB
+  var _todayD=_now.getUTCDate(), _todayM=_now.getUTCMonth();
+  var todayObj={d:_todayD,m:_todayM};
+  // Kalau hari ini ada di data → pakai. Kalau tidak, pakai tanggal data
+  // pertama yang >= hari ini (buang sisa tanggal lama).
+  var first=null;
+  var todayVal=toDate(todayObj).getTime();
+  if(days.some(function(x){return x.d===_todayD&&x.m===_todayM;})){
+    first=todayObj;
+  } else {
+    for(var fi=0;fi<days.length;fi++){
+      if(toDate(days[fi]).getTime()>=todayVal){ first=days[fi]; break; }
+    }
+    if(!first) first=days[days.length-1];
+  }
   // 'last' = tanggal terjauh, TAPI dibatasi maksimal H+1 dari 'first'.
-  // Mencegah tanggal Big Match berjadwal jauh (mis. 31 Agustus) membuat
-  // label header jadi '31 Juli - 31 Agustus'. Pakai Date -> lintas bulan/tahun aman.
   var dMaxAllowed=new Date(toDate(first).getTime()+86400000); // besok
   var last=first;
   for(var i=days.length-1;i>=0;i--){
-    if(toDate(days[i])<=dMaxAllowed){ last=days[i]; break; }
+    if(toDate(days[i])<=dMaxAllowed&&toDate(days[i])>=toDate(first)){ last=days[i]; break; }
   }
   var yrLast=(last.m===0&&wrapYear)?yr+1:yr;
   if(first.d===last.d&&first.m===last.m) return first.d+' '+BULAN[first.m]+' '+yr;
