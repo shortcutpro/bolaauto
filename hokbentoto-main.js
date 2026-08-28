@@ -8,7 +8,7 @@ console.log("[bolaauto] date-fix-2026-08-24 aktif");
 ═══════════════════════════════════════════════ */
 var SOURCE_URL    = 'https://shortq.xyz/prediksibola'; // sumber data prediksi
 var SITE_NAME     = 'HOKBENTOTO';
-var SITE_LOGO     = 'https://hokben38422.com/resources/images/logo.png';
+var SITE_LOGO     = 'https://cdn.areabermain.club/assets/cdn/az6/2026/02/04/20260204/b320864d719e41630e6662f49dee7ebf/logo-mobile.png';
 var MBAPPE_GIF    = 'https://photoku.io/images/2026/05/31/giffmbappee-finall.gif';
 var MARQUEE_TEXT  = '👑 PREDIKSI BOLA TERUPDATE ! Tunggu apa lagi? Daftar di HOKBENTOTO dan nikmati pengalaman taruhan terbaik! 👑';
 var COLOR_MAIN    = '#FFD700';
@@ -222,7 +222,7 @@ function showLoading(msg, pct){
   var hasBar = pctVal >= 0;
   root.innerHTML =
     '<div class="ibc-loading-wrap">'+
-    '<img src="https://hokben38422.com/resources/images/logo.png" alt="HOKBENTOTO" style="width:110px;max-height:72px;object-fit:contain;filter:drop-shadow(0 0 16px #FFD700);margin-bottom:8px;"/>'+
+    '<img src="https://cdn.areabermain.club/assets/cdn/az6/2026/02/04/20260204/b320864d719e41630e6662f49dee7ebf/logo-mobile.png" alt="HOKBENTOTO" style="width:110px;max-height:72px;object-fit:contain;filter:drop-shadow(0 0 16px #FFD700);margin-bottom:8px;"/>'+
     '<div class="ibc-spinner"></div>'+
     '<div class="ibc-loading-text">⚽ '+(msg||'Memuat Prediksi HOKBENTOTO…')+'</div>'+
     (hasBar?
