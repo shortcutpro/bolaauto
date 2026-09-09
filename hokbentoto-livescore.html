@@ -478,20 +478,38 @@
 
   // Kirim tinggi konten ke halaman induk (untuk embed iframe auto-height)
   (function(){
+    var lastH=0;
+    function measure(){
+      var el=document.getElementById('hbtls-1');
+      var h=el?el.getBoundingClientRect().height:0;
+      return Math.ceil(h);
+    }
     function sendHeight(){
       try{
-        var h=document.documentElement.scrollHeight||document.body.scrollHeight;
-        if(window.parent&&window.parent!==window){window.parent.postMessage({hbtlsHeight:h},'*');}
+        var h=measure();
+        // hanya kirim kalau berubah lebih dari 2px (cegah loop memanjang)
+        if(h>200&&Math.abs(h-lastH)>2){
+          lastH=h;
+          if(window.parent&&window.parent!==window){window.parent.postMessage({hbtlsHeight:h},'*');}
+        }
       }catch(e){}
     }
     window.addEventListener('load',sendHeight);
     window.addEventListener('resize',sendHeight);
-    // pantau perubahan isi (skor update, ganti olahraga, dll)
     if(window.MutationObserver){
-      var mo=new MutationObserver(function(){sendHeight();});
-      mo.observe(document.body,{childList:true,subtree:true,characterData:true});
+      var pending=false;
+      var mo=new MutationObserver(function(){
+        if(pending)return;
+        pending=true;
+        setTimeout(function(){pending=false;sendHeight();},300);
+      });
+      var target=document.getElementById('hbtls-1')||document.body;
+      mo.observe(target,{childList:true,subtree:true,characterData:true});
     }
-    setInterval(sendHeight,2000);
+    // beberapa pengukuran awal saja, lalu berhenti (tidak loop terus)
+    setTimeout(sendHeight,500);
+    setTimeout(sendHeight,1500);
+    setTimeout(sendHeight,3000);
   })();
 
 })({
