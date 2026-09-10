@@ -313,13 +313,10 @@
     var lastH=0;
     function measure(){
       var el=document.getElementById('hbtls-1');
-      var w=el?Math.ceil(el.getBoundingClientRect().height):0;
-      var doc=Math.max(
-        document.body?document.body.scrollHeight:0,
-        document.documentElement?document.documentElement.scrollHeight:0
-      );
-      // pakai yang paling akurat: tinggi widget + sedikit ruang padding body
-      return Math.max(w+12, doc);
+      if(!el)return 0;
+      // tinggi widget yang sebenarnya tampil (paling akurat, tidak ada ruang kosong)
+      var rect=el.getBoundingClientRect();
+      return Math.ceil(rect.height)+8;
     }
     function send(force){
       try{
@@ -338,7 +335,9 @@
       var t=document.getElementById('hbtls-1')||document.body;
       mo.observe(t,{childList:true,subtree:true,characterData:true});
     }
-    [400,1200,2500,4500,7000].forEach(function(ms){setTimeout(function(){send(true);},ms);});
+    [200,600,1200,2500,4500,7000].forEach(function(ms){setTimeout(function(){send(true);},ms);});
+    // kirim berkala ringan: hanya benar-benar mengirim kalau tinggi berubah (tidak bikin loop)
+    setInterval(function(){send(false);},1500);
   }
 
   if(document.readyState==='loading'){
