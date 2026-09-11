@@ -57,7 +57,7 @@
     var cache=root.querySelector('.hbtls-cache');
     var dateEl=root.querySelector('.hbtls-date');
 
-    var sport=config.sport, filter='all', query='', matches=[], timer=null, controller=null;
+    var sport=config.sport, filter='all', query='', matches=[], timer=null, controller=null, etags=Object.create(null);
 
     function node(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!==undefined&&text!==null)e.textContent=String(text);return e;}
     function normalize(v){return String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\s+/g,' ').trim();}
@@ -202,16 +202,21 @@
       if(controller)controller.abort();
       var current=new AbortController();controller=current;
       try{
-        // Endpoint baru LINETOGEL: sport ditempel di ujung URL (…/scores/football)
-        var base=String(config.rest||'');
-        if(base.charAt(base.length-1)!=='/')base=base+'/';
-        var url=base+encodeURIComponent(sport);
-        var response=await fetch(url,{method:'GET',headers:{'Accept':'application/json'},credentials:'omit',cache:'no-cache',mode:'cors',signal:current.signal});
+        // Endpoint LINETOGEL yang benar: sport dikirim lewat query string (…/scores?sport=football)
+        var url=new URL(String(config.rest),window.location.origin);
+        url.searchParams.set('sport',sport);
+        var headers={'Accept':'application/json'};
+        if(etags[sport])headers['If-None-Match']=etags[sport];
+        var response=await fetch(url.toString(),{method:'GET',headers:headers,credentials:'omit',cache:'no-cache',signal:current.signal});
+        if(response.status===304){if(updated)updated.textContent='Snapshot tidak berubah';return;}
         if(!response.ok)throw new Error('HTTP '+response.status);
         var json=await response.json();
+        var etag=response.headers.get('ETag');
+        if(etag)etags[sport]=etag;
         matches=Array.isArray(json.matches)?json.matches:[];
         if(json.today_label&&dateEl)dateEl.textContent=json.today_label;
         if(updated)updated.textContent='Update: '+(json.updated_wib||'--:--:--')+' WIB'+(json.partial?' • sebagian sumber tidak tersedia':'');
+        if(cache){var cs=json.cache_state||response.headers.get('X-LSL-Cache')||'ready';cache.textContent='Snapshot: '+cs;}
         renderAll();
       }catch(error){
         if(error.name==='AbortError')return;
@@ -299,7 +304,7 @@
 
 })({
   "id":"hbtls-1",
-  "rest":"https://lineblog953.com/wp-json/lsl/v1/scores/",
+  "rest":"https://lineblog953.com/wp-json/lsl/v1/scores",
   "logoBase":"https://shortcutpro.github.io/bolaauto/",
   "sport":"football",
   "refresh":35000,
