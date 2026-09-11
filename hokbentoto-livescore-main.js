@@ -299,7 +299,7 @@
 
 })({
   "id":"hbtls-1",
-  "rest":"https://lineblog953.com/wp-json/live-score-linetogel/v1/scores/",
+  "rest":"https://lineblog953.com/wp-json/lsl/v1/scores",
   "logoBase":"https://shortcutpro.github.io/bolaauto/",
   "sport":"football",
   "refresh":35000,
