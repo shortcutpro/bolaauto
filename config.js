@@ -7,5 +7,5 @@
    Ganti nilai "base" di bawah -> SEMUA situs ikut berubah.
    ============================================================ */
 window.JPK_CONFIG = {
-  base: "https://jpbolepalngi2.pagesco.de/prediksi-bola-"
+  base: "https://bolapelangi2.jadwalbola.org/prediksi-bola-"
 };
