@@ -20,6 +20,7 @@
 </style>
 
 <script src="logo-db.js"></script>
+<script src="https://shortcutpro.github.io/bolaauto/config.js"></script>
 <script>
 (function(){
 'use strict';
@@ -54,7 +55,7 @@ var PROXIES = [
    Set JPK_ENABLED = false untuk kembali ke sumber lama.
 ═══════════════════════════════════════════════ */
 var JPK_ENABLED = true;
-var JPK_BASE    = 'https://jpbolepalngi2.pagesco.de/prediksi-bola-';
+var JPK_BASE    = ((window.JPK_CONFIG&&window.JPK_CONFIG.base)) || 'https://jpbolepalngi2.pagesco.de/prediksi-bola-';
 var JPK_BULAN   = ['januari','februari','maret','april','mei','juni','juli','agustus','september','oktober','november','desember'];
 
 function jpkTanggalWIB(offsetHari){
