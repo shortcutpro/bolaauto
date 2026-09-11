@@ -202,15 +202,16 @@
       if(controller)controller.abort();
       var current=new AbortController();controller=current;
       try{
-        var url=new URL(config.rest);
-        url.searchParams.set('sport',sport);
-        var response=await fetch(url.toString(),{method:'GET',headers:{'Accept':'application/json'},credentials:'omit',cache:'no-cache',mode:'cors',signal:current.signal});
+        // Endpoint baru LINETOGEL: sport ditempel di ujung URL (…/scores/football)
+        var base=String(config.rest||'');
+        if(base.charAt(base.length-1)!=='/')base=base+'/';
+        var url=base+encodeURIComponent(sport);
+        var response=await fetch(url,{method:'GET',headers:{'Accept':'application/json'},credentials:'omit',cache:'no-cache',mode:'cors',signal:current.signal});
         if(!response.ok)throw new Error('HTTP '+response.status);
         var json=await response.json();
         matches=Array.isArray(json.matches)?json.matches:[];
         if(json.today_label&&dateEl)dateEl.textContent=json.today_label;
         if(updated)updated.textContent='Update: '+(json.updated_wib||'--:--:--')+' WIB'+(json.partial?' • sebagian sumber tidak tersedia':'');
-        if(cache)cache.textContent='Snapshot: '+(json.cache_state||response.headers.get('X-LSL-Cache')||'ready');
         renderAll();
       }catch(error){
         if(error.name==='AbortError')return;
@@ -298,7 +299,7 @@
 
 })({
   "id":"hbtls-1",
-  "rest":"https://lineblog953.com/wp-json/lsl/v1/scores",
+  "rest":"https://lineblog953.com/wp-json/live-score-linetogel/v1/scores/",
   "logoBase":"https://shortcutpro.github.io/bolaauto/",
   "sport":"football",
   "refresh":35000,
