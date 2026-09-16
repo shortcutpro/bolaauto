@@ -14,7 +14,7 @@ var MARQUEE_TEXT  = '🐉 PREDIKSI BOLA TERUPDATE ! Tunggu apa lagi? Daftar di R
 var COLOR_MAIN    = '#E23636';
 var COLOR_TEXT    = '#ffe0e0';
 var BG_IMAGE      = 'https://cdn.areabermain.club/assets/cdn/az9/2026/08/29/20260829/054bd17b6c0dd2e4ae952e7fe2bf97fb/background-web-ruangwd-new-juli-1.jpg';
-var BG_OVERLAY    = 'rgba(60,4,4,0.55), rgba(90,8,8,0.62)';
+var BG_OVERLAY    = '#000000, #000000';
 var AUTO_REFRESH  = 5 * 60 * 1000; // 5 menit
 var CACHE_KEY     = 'ruangwd_pred_cache_v1';
 var CACHE_TTL     = 30 * 60 * 1000; // cache dianggap segar 30 menit
@@ -213,9 +213,9 @@ var root = document.getElementById('ruangwd-root');
   var s=document.createElement('style');
   s.textContent=
     '#ruangwd-root .ibc-progress-wrap{width:80%;max-width:320px;margin-top:2px;}'
-    +'#ruangwd-root .ibc-progress-track{width:100%;height:10px;background:rgba(255,255,255,0.06);border-radius:8px;overflow:hidden;border:1px solid #FFC80026;position:relative;}'
-    +'#ruangwd-root .ibc-progress-fill{height:100%;width:0%;background:linear-gradient(90deg,#8c6e00,#FFC800,#ffd84c);border-radius:8px;transition:width .4s ease;box-shadow:0 0 12px #FFC80066,inset 0 1px 0 rgba(255,255,255,0.25);}'
-    +'#ruangwd-root .ibc-progress-pct{color:#FFC800;font-size:12px;font-weight:700;letter-spacing:1px;text-align:center;margin-top:6px;text-shadow:0 0 8px #FFC80060;}';
+    +'#ruangwd-root .ibc-progress-track{width:100%;height:10px;background:rgba(255,255,255,0.06);border-radius:8px;overflow:hidden;border:1px solid #E2363626;position:relative;}'
+    +'#ruangwd-root .ibc-progress-fill{height:100%;width:0%;background:linear-gradient(90deg,#7a1414,#E23636,#ff8080);border-radius:8px;transition:width .4s ease;box-shadow:0 0 12px #E2363666,inset 0 1px 0 rgba(255,255,255,0.25);}'
+    +'#ruangwd-root .ibc-progress-pct{color:#E23636;font-size:12px;font-weight:700;letter-spacing:1px;text-align:center;margin-top:6px;text-shadow:0 0 8px #E2363660;}';
   document.head.appendChild(s);
 })();
 
@@ -224,7 +224,7 @@ function showLoading(msg, pct){
   var hasBar = pctVal >= 0;
   root.innerHTML =
     '<div class="ibc-loading-wrap">'+
-    '<img src="https://cdn.areabermain.club/assets/cdn/az5/2026/09/17/20260917/ba5b6c700dc14f65946009082c308130/logo-1.png" alt="RUANG WD" style="width:110px;max-height:72px;object-fit:contain;filter:drop-shadow(0 0 16px #FFC800);margin-bottom:8px;"/>'+
+    '<img src="https://cdn.areabermain.club/assets/cdn/az5/2026/09/17/20260917/ba5b6c700dc14f65946009082c308130/logo-1.png" alt="RUANG WD" style="width:110px;max-height:72px;object-fit:contain;filter:drop-shadow(0 0 16px #E23636);margin-bottom:8px;"/>'+
     '<div class="ibc-spinner"></div>'+
     '<div class="ibc-loading-text">⚽ '+(msg||'Memuat Prediksi RUANG WD…')+'</div>'+
     (hasBar?
